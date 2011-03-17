@@ -1,5 +1,6 @@
 package pmediane;
 
+import pne.RechercheLocale;
 import pne.Voisinage;
 import pne.VoisinageTailleVariable;
 
@@ -15,7 +16,7 @@ import pne.VoisinageTailleVariable;
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */
-public class VoisinagePMediane implements Voisinage<SolutionPMediane>, VoisinageTailleVariable<SolutionPMediane>
+public class VoisinagePMediane implements Voisinage<SolutionPMediane>, VoisinageTailleVariable<SolutionPMediane>, RechercheLocale<SolutionPMediane>
 {
 	/**
 	 * Génère une solution au problème de la p-médiane appartenant
@@ -40,6 +41,20 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	 * 		   k de la solution de base.
 	 */
 	public SolutionPMediane genererSolution(SolutionPMediane s, int k)
+	{
+		return null;
+	}
+
+	/**
+	 * Trouve la meilleure solution locale disponible dans le
+	 * voisinage de la solution initiale fournie en effectuant
+	 * une recherche exhaustive.
+	 * 
+	 * @param s la solution initiale.
+	 * @return une solution appartenant au voisinage de la solution
+	 * 		   de base
+	 */
+	public SolutionPMediane trouverMeilleureSolutionLocale(SolutionPMediane s)
 	{
 		return null;
 	}
