@@ -50,8 +50,8 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	}
 	
 	/**
-	 * Teste si la condition d'arrêt de l'heuristique VNS
-	 * est atteinte ou non.
+	 * Teste si la condition d'arrêt choisie de l'heuristique
+	 * VNS est atteinte ou non.
 	 * 
 	 * @return vrai si et seulement si la condition d'arrêt
 	 * 		   de l'heuristique est atteinte.

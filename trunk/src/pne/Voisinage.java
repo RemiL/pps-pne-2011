@@ -19,4 +19,17 @@ public interface Voisinage<Solution>
 	 * 		   solution de base.
 	 */
 	public Solution genererSolution(Solution s);
+	
+	/**
+	 * Retourne la meilleure solution appartenant au
+	 * voisinage de la solution fournie.
+	 * La solution retournée est la meilleure par rapport
+	 * à la fonction objectif fournie.
+	 * 
+	 * @param s la solution de base.
+	 * @param f la fonction objectif.
+	 * @return la meilleure solution située dans le
+	 * 		   voisinage de la solution de base.
+	 */
+	public Solution rechercherMeilleureSolution(Solution s, FonctionObjectif<Solution> f);
 }
