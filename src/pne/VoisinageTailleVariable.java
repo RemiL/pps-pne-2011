@@ -12,8 +12,8 @@ package pne;
 public interface VoisinageTailleVariable<Solution>
 {
 	/**
-	 * Retourne une solution appartenant au voisinage de taille
-	 * indiquée de la solution fournie.
+	 * Retourne une solution aléatoire appartenant au 
+	 * voisinage de taille indiquée de la solution fournie.
 	 * 
 	 * @param s la solution de base.
 	 * @param k la taille du voisinage à considérer.
@@ -21,4 +21,18 @@ public interface VoisinageTailleVariable<Solution>
 	 * 		   k de la solution de base.
 	 */
 	public Solution genererSolution(Solution s, int k);
+	
+	/**
+	 * Retourne la meilleure solution appartenant au voisinage
+	 * de taille indiquée de la solution fournie.
+	 * La solution retournée est la meilleure par rapport
+	 * à la fonction objectif fournie.
+	 * 
+	 * @param s la solution de base.
+	 * @param k la taille du voisinage à considérer.
+	 * @param f la fonction objectif.
+	 * @return la meilleure solution située dans le voisinage
+	 * 		   de taille k de la solution de base.
+	 */
+	public Solution rechercherMeilleureSolution(Solution s, int k, FonctionObjectif<Solution> f);
 }

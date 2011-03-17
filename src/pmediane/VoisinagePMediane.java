@@ -1,6 +1,5 @@
 package pmediane;
 
-import pne.RechercheLocale;
 import pne.Voisinage;
 import pne.VoisinageTailleVariable;
 
@@ -11,12 +10,12 @@ import pne.VoisinageTailleVariable;
  * est fermé et une entité est ouverte à la place. Les affectations
  * des entités aux centres sont recalculées pour rattacher
  * toute entité à son centre le plus proche. Le voisinage
- * est à taille variable, le nombre de permutations à effectuer
- * est réglable.
+ * est à taille variable puisque le nombre de permutations à
+ * effectuer peut être réglé.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */
-public class VoisinagePMediane implements Voisinage<SolutionPMediane>, VoisinageTailleVariable<SolutionPMediane>, RechercheLocale<SolutionPMediane>
+public class VoisinagePMediane implements Voisinage<SolutionPMediane>, VoisinageTailleVariable<SolutionPMediane>
 {
 	/**
 	 * Génère une solution au problème de la p-médiane appartenant
@@ -51,10 +50,25 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	 * une recherche exhaustive.
 	 * 
 	 * @param s la solution initiale.
-	 * @return une solution appartenant au voisinage de la solution
-	 * 		   de base
+	 * @return la meilleure solution située dans le
+	 * 		   voisinage de la solution de base.
 	 */
-	public SolutionPMediane trouverMeilleureSolutionLocale(SolutionPMediane s)
+	public SolutionPMediane rechercherMeilleureSolution(SolutionPMediane s)
+	{
+		return null;
+	}
+	
+	/**
+	 * Trouve la meilleure solution locale disponible dans le
+	 * voisinage de taille k de la solution initiale fournie en
+	 * effectuant une recherche exhaustive.
+	 * 
+	 * @param s la solution initiale.
+	 * @param k la taille du voisinage à considérer.
+	 * @return la meilleure solution située dans le voisinage
+	 * 		   de taille k de la solution de base.
+	 */
+	public SolutionPMediane rechercherMeilleureSolution(SolutionPMediane s,	int k)
 	{
 		return null;
 	}
