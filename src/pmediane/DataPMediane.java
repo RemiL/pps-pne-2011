@@ -17,7 +17,10 @@ public class DataPMediane
 	private final int nbEntites;
 	/** Le nombre de centres à ouvrir. */
 	private final int nbCentres;
-	/**	Le tableau des distances*/
+	/**	Le tableau des distances.
+	 *  Pour chaque entité de départ, on dispose
+	 *  d'une table de hachage permettant de donner
+	 *  retrouver la distance à l'entité d'arrivée. */
 	private HashMap<Integer, Integer>[] distances;
 	
 	/**

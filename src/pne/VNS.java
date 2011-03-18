@@ -32,7 +32,17 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	/**	Le nombre de structures de voisinage. */
 	protected int kMax;
 	
-	public VNS()
+	/**
+	 * Crée une instance de l'heuristique de recherche à voisinage
+	 * variable générique avec les paramètres de configuration fournis.
+	 * 
+	 * @param f la fonction objectif.
+	 * @param kMax le nombre de structures de voisinage.
+	 * @param heuristiqueSolInitiale l'heuristique à utiliser pour trouver
+	 * 								 la solution initiale.
+	 */
+	public VNS(FonctionObjectif<Solution> f, int kMax,
+			   Heuristique<Data, Solution> heuristiqueSolInitiale)
 	{
 		
 	}
@@ -57,6 +67,16 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	 * 		   de l'heuristique est atteinte.
 	 */
 	protected abstract boolean estAtteinteConditionArret();
+	
+	/**
+	 * Met à jour la condition d'arrêt choisie de l'heuristique
+	 * VNS. Le paramètre permet d'indiquer s'il s'agit de la 
+	 * première mise à jour ou non.
+	 * 
+	 * @param init indique s'il s'agit de l'initialisation
+	 * 			   de la condition.
+	 */
+	protected abstract void majConditionArret(boolean init);
 	
 	/**
 	 * Retourne une solution appartenant à la structure courante

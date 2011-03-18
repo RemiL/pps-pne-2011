@@ -23,12 +23,6 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	protected double temp;
 	/** La température initiale du recuit. */
 	protected double tempInitiale;
-	/** La température à laquelle on considère
-	 *  le système comme gelé et on arrête la
-	 *  recherche. */
-	protected double tempArret;
-	/** Le nombre d'itérations par palier. */
-	protected int nbIterationsPalier;
 	/** La fonction objectif. */
 	protected FonctionObjectif<Solution> f;
 	/** La meilleure valeur de la fonction
@@ -48,15 +42,13 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 * avec les paramètres de configuration fournis.
 	 * 
 	 * @param tempInitiale la température initiale.
-	 * @param tempArret la température d'arrêt de la recherche.
-	 * @param nbIterationsPalier le nombre d'itérations par palier.
 	 * @param f la fonction objectif.
 	 * @param voisinage le voisinage à utiliser.
 	 * @param heuristiqueSolInitiale l'heuristique à utiliser pour trouver
 	 * 								 la solution initiale.
 	 */
-	protected RecuitSimule(double tempInitiale, double tempArret, int nbIterationsPalier,
-						   FonctionObjectif<Solution> f, Voisinage<Solution> voisinage,
+	protected RecuitSimule(double tempInitiale, FonctionObjectif<Solution> f, 
+						   Voisinage<Solution> voisinage,
 						   Heuristique<Data, Solution> heuristiqueSolInitiale)
 	{
 		
@@ -73,6 +65,45 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	{
 		return null;
 	}
+	
+	/**
+	 * Teste si la condition d'arrêt choisie de l'heuristique
+	 * du recuit simulé est atteinte ou non.
+	 * 
+	 * @return vrai si et seulement si la condition d'arrêt
+	 * 		   de l'heuristique est atteinte.
+	 */
+	protected abstract boolean estAtteinteConditionArret();
+	
+	/**
+	 * Met à jour la condition d'arrêt choisie de l'heuristique
+	 * du recuit simulé. Le paramètre permet d'indiquer s'il
+	 * s'agit de la première mise à jour ou non.
+	 * 
+	 * @param init indique s'il s'agit de l'initialisation
+	 * 			   de la condition.
+	 */
+	protected abstract void majConditionArret(boolean init);
+	
+	/**
+	 * Teste si la condition de changement de palier de 
+	 * température est atteinte ou non.
+	 * 
+	 * @return vrai si et seulement si la condition de
+	 * 		   changement de palier est atteinte.
+	 */
+	protected abstract boolean estAtteinteConditionChangementPalier();
+	
+	/**
+	 * Met à jour la condition de changement de palier de 
+	 * température du recuit simulé. Le paramètre permet 
+	 * d'indiquer s'il s'agit de la première mise à jour
+	 * ou non.
+	 * 
+	 * @param init indique s'il s'agit de l'initialisation
+	 * 			   de la condition.
+	 */
+	protected abstract void majConditionChangementPalier(boolean init);
 	
 	/**
 	 * Vérifie si une solution dégradant la valeur de la
