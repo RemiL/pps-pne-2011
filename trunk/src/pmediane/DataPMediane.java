@@ -1,5 +1,7 @@
 package pmediane;
 
+import java.util.HashMap;
+
 /**
  * Classe représentant les données correspondant à
  * une instance du problème de la p-médiane.
@@ -15,6 +17,8 @@ public class DataPMediane
 	private final int nbEntites;
 	/** Le nombre de centres à ouvrir. */
 	private final int nbCentres;
+	/**	Le tableau des distances*/
+	private HashMap<Integer, Integer>[] distances;
 	
 	/**
 	 * Crée une instance du problème de la p-médiane
