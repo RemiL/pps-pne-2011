@@ -16,6 +16,14 @@ import pne.Voisinage;
  */
 public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 {
+	/** La température à laquelle on considère
+	 *  le système comme gelé et on arrête la
+	 *  recherche. */
+	private double tempArret;
+	/** Le nombre d'itérations pour le palier courant. */
+	private int nbIterationsPalier;
+	/** Le nombre maximum d'itérations par palier. */
+	private int nbIterationsMaxPalier;
 	/** Le taux de décroissance de la température à chaque
 	 *  palier utilisé par le schéma de refroidissement. */
 	private double tauxDecroissanceTemp;
@@ -37,8 +45,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	public RSPMediane(double tempInitiale, double tempArret, int nbIterationsPalier, double tauxDecroissanteTemp,
 			   		  Voisinage<SolutionPMediane> voisinage, Heuristique<DataPMediane, SolutionPMediane> heuristiqueSolInitiale)
 	{
-		super(tempInitiale, tempArret, nbIterationsPalier,
-			  new FonctionObjectifPMediane(), voisinage, heuristiqueSolInitiale);
+		super(tempInitiale, new FonctionObjectifPMediane(), voisinage, heuristiqueSolInitiale);
 	}
 	
 	/**
@@ -57,6 +64,55 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 *    initiale.
 	 */
 	public RSPMediane()
+	{
+		
+	}
+	
+	/**
+	 * Teste si la condition d'arrêt est atteinte,
+	 * c'est-à-dire si la température d'arrêt où
+	 * le système est considéré comme gelé est
+	 * atteinte.
+	 * 
+	 * @return vrai si et seulement si la température
+	 * 		   d'arrêt est atteinte.
+	 */
+	protected boolean estAtteinteConditionArret()
+	{
+		return false;
+	}
+
+	/**
+	 * Met à jour la condition d'arrêt, dans notre
+	 * implémentation ne fait rien.
+	 */
+	protected void majConditionArret(boolean init)
+	{
+		// On ne fait rien ! La mise à jour est faite
+		// par l'application du schéma de refroidissement.
+	}
+	
+	/**
+	 * Teste si la condition de changement de palier est atteinte,
+	 * c'est-à-dire si le nombre d'itérations pour le palier courant
+	 * à atteint la limite fixée.
+	 * 
+	 * @return vrai si et seulement si la condition de
+	 * 		   changement de palier est atteinte.
+	 */
+	protected boolean estAtteinteConditionChangementPalier()
+	{
+		return false;
+	}
+
+	/**
+	 * Met à jour la condition de changement de palier en incrémentant
+	 * le nombre d'itérations effectuées.
+	 * 
+	 * @param init indique s'il s'agit de l'initialisation
+	 * 			   de la condition.
+	 */
+	protected void majConditionChangementPalier(boolean init)
 	{
 		
 	}
