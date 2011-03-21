@@ -37,12 +37,10 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	 * variable générique avec les paramètres de configuration fournis.
 	 * 
 	 * @param f la fonction objectif.
-	 * @param kMax le nombre de structures de voisinage.
 	 * @param heuristiqueSolInitiale l'heuristique à utiliser pour trouver
 	 * 								 la solution initiale.
 	 */
-	public VNS(FonctionObjectif<Solution> f, int kMax,
-			   Heuristique<Data, Solution> heuristiqueSolInitiale)
+	public VNS(FonctionObjectif<Solution> f, Heuristique<Data, Solution> heuristiqueSolInitiale)
 	{
 		
 	}

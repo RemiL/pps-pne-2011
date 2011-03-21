@@ -5,6 +5,9 @@ import pne.Heuristique;
 /**
  * Classe implémentant un solveur du PLNE de la p-médiane
  * basé sur CPLEX.
+ * Ce problème vise à choisir P centres parmi N entités tels que 
+ * la somme des distances des entités à leur centre le plus proche
+ * soit minimale.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */
