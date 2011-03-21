@@ -29,7 +29,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	private double tauxDecroissanceTemp;
 	
 	/**
-	 * Crée une instance de l'heuristique du recuit simulé spécialisé
+	 * Crée une instance de l'heuristique du recuit simulé spécialisée
 	 * pour traiter le problème de la p-médiane avec les paramètres
 	 * fournis.
 	 * 
@@ -49,7 +49,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	}
 	
 	/**
-	 * Crée une instance de l'heuristique du recuit simulé spécialisé
+	 * Crée une instance de l'heuristique du recuit simulé spécialisée
 	 * pour traiter le problème de la p-médiane.
 	 * Les paramètres utilisés pour le recuit sont ceux par défaut, à
 	 * savoir :
