@@ -18,7 +18,7 @@ public class HeuristiqueGloutonnePMediane implements Heuristique<DataPMediane, S
 	 * Calcule la solution la plus optimale possible en utilisant
 	 * l'heuristique gloutonne à partir des données fournies.
 	 * 
-	 * @param donnes les données sur lesquelles l'heuristique
+	 * @param donnees les données sur lesquelles l'heuristique
 	 * 				 doit être appliquée.
 	 * @return la solution la plus optimale possible construite
 	 * 		   avec l'heuristique.

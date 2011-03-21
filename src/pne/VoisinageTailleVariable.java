@@ -5,7 +5,7 @@ package pne;
  * à taille variable permettant de générer une solution à partir
  * d'une autre.
  * 
- * @param <Solution> le type des solution manipulées par le voisinage.
+ * @param &lt;Solution&gt; le type des solution manipulées par le voisinage.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */

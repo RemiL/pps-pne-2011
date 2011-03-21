@@ -8,8 +8,8 @@ package pne;
  * héritage aux différents problèmes auxquels elle peut être
  * appliquée.
  * 
- * @param <Data> le type des données manipulées par le VNS.
- * @param <Solution> le type des solution manipulées par le VNS.
+ * @param &lt;Data&gt; le type des données manipulées par le VNS.
+ * @param &lt;Solution&gt; le type des solution manipulées par le VNS.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */

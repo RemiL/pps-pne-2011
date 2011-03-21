@@ -4,8 +4,8 @@ package pne;
  * Interface générique permettant de manipuler des heuristiques
  * permettant de calculer une solution à partir de données.
  * 
- * @param <Data> le type des données manipulées par l'heuristique.
- * @param <Solution> le type des solution manipulées par l'heuristique.
+ * @param &lt;Data&gt; le type des données manipulées par l'heuristique.
+ * @param &lt;Solution&gt; le type des solution manipulées par l'heuristique.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */

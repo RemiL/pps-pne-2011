@@ -40,4 +40,17 @@ public class FonctionObjectifPMediane implements FonctionObjectif<SolutionPMedia
 	{
 		return false;
 	}
+	
+	/**
+	 * Indique si l'objectif est de maximiser la fonction
+	 * ou au contraire de la minimiser.
+	 * Retourne faux puisque dans le cas du problème de la
+	 * p-médiane on a une minimisation.
+	 * 
+	 * @return faux puisque l'objectif est de minimiser.
+	 */
+	public boolean estMaximisation()
+	{
+		return false;
+	}
 }

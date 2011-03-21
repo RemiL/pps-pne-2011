@@ -18,7 +18,7 @@ public class SolutionPMediane
 	/** Le tableau des distances aux centres. */
 	private int[] distancesCentres;
 	/** Le tableau des affectations des entités aux centres. */
-	private int[] centresEntite;
+	private int[] centresEntites;
 	
 	/**
 	 * Crée une instance de solution à un problème
