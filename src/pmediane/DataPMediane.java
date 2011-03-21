@@ -56,6 +56,16 @@ public class DataPMediane
 	}
 	
 	/**
+	 * Retourne le nombre de liens dans le graphe.
+	 * 
+	 * @return le nombre de liens dans le graphe.
+	 */
+	public int getNbLiens()
+	{
+		return 0;
+	}
+	
+	/**
 	 * Teste s'il existe un lien entre les deux
 	 * entités dont le numéro est fourni.
 	 * 
