@@ -7,8 +7,8 @@ package pne;
  * héritage aux différents problèmes auxquels elle peut être
  * appliquée.
  * 
- * @param <Data> le type des données manipulées par le recuit simulé.
- * @param <Solution> le type des solution manipulées par le recuit simulé.
+ * @param &lt;Data&gt; le type des données manipulées par le recuit simulé.
+ * @param &lt;Solution&gt; le type des solution manipulées par le recuit simulé.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */

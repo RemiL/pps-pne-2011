@@ -29,7 +29,7 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	private VoisinageTailleVariable<SolutionPMediane> voisinage;
 	/** La valeur de la fonction objectif au début de
 	 *  l'itération. */
-	protected int valObjSauvegardee;
+	private int valObjSauvegardee;
 	
 	/**
 	 * Crée une instance de l'heuristique VNS spécialisée pour

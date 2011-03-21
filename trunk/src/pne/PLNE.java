@@ -32,21 +32,21 @@ public abstract class PLNE
 	}
 	
 	/** Le nombre de variables utilisées dans le PLNE. */
-	private int nbVariables;
+	protected int nbVariables;
 	/** Le nom des variables utilisées. */
-	private String[] nomsVariables;
+	protected String[] nomsVariables;
 	/** Le nom des variables utilisées. */
-	private TypeVar[] typesVariables;
+	protected TypeVar[] typesVariables;
 	/** Les coefficients de la fonction objectif. */
-	private int[] fonctionObjectif;
+	protected int[] fonctionObjectif;
 	/** L'objectif à atteindre, à savoir minimiser ou
 	 *  maximiser la valeur de la fonction objectif. */
-	private TypeObjectif typeObjectif;
+	protected TypeObjectif typeObjectif;
 	/** La matrice des contraintes. La dernière valeur
 	 *  correspond à la partie droite de la contrainte. */
-	private int[][] contraintes;
+	protected int[][] contraintes;
 	/** Le type des contraintes (<=, =, >=). */
-	private TypeContrainte[] typesContraintes;
+	protected TypeContrainte[] typesContraintes;
 	
 	/**
 	 * Retourne le nombre de variables du programme linéaire.

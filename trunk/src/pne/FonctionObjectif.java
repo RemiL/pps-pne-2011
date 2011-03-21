@@ -7,8 +7,8 @@ package pne;
  * passage d'une certaine valeur resultat à une autre constitue
  * ou non une amélioration de la fonction objectif.
  * 
- * @param <Solution> le type des solution manipulées par 
- *                   la fonction objectif.
+ * @param &lt;Solution&gt; le type des solution manipulées par 
+ *                   	   la fonction objectif.
  * 
  * @author Bruno Duisit, Rémi Lacroix, Marie Nivet
  */
@@ -35,4 +35,13 @@ public interface FonctionObjectif<Solution>
 	 * 		   pas la fonction objectif.
 	 */
 	public boolean estAmelioration(int nouvelleVal, int ancienneVal);
+	
+	/**
+	 * Indique si l'objectif est de maximiser la fonction
+	 * ou au contraire de la minimiser.
+	 * 
+	 * @return vrai si l'objectif est de maximiser la fonction
+	 * 		   faux si l'objectif est de la minimiser.
+	 */
+	public boolean estMaximisation();
 }
