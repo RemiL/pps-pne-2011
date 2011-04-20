@@ -22,9 +22,14 @@ public class FonctionObjectifPMediane implements FonctionObjectif<SolutionPMedia
 	 */
 	public int calculer(SolutionPMediane s)
 	{
-		return 0;
+		int val = 0;
+		
+		for (int i=0; i<s.getDonnees().getNbEntites(); i++)
+			val += s.getDistanceCentre(i);
+		
+		return val;
 	}
-
+	
 	/**
 	 * Teste si la nouvelle valeur fournie améliore (au sens large)
 	 * la valeur objectif au sens du problème de la p-médiane.
@@ -38,7 +43,7 @@ public class FonctionObjectifPMediane implements FonctionObjectif<SolutionPMedia
 	 */
 	public boolean estAmelioration(int nouvelleVal, int ancienneVal)
 	{
-		return false;
+		return (nouvelleVal <= ancienneVal);
 	}
 	
 	/**
