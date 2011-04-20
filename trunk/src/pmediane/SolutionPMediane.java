@@ -15,22 +15,57 @@ public class SolutionPMediane
 	private DataPMediane donnees;
 	/** Le tableau des centres choisis. */
 	private int[] centres;
-	/** Le tableau des distances aux centres. */
-	private int[] distancesCentres;
 	/** Le tableau des affectations des entités aux centres. */
-	private int[] centresEntites;
+	private int[] affectations;
+	/** Le tableau des deuxièmes meilleurs centres pour chaque entité. */
+	private int[] affectationsSecondaires;
 	
 	/**
 	 * Crée une instance de solution à un problème
 	 * de la p-médiane représenté par les données
-	 * fournies.
+	 * fournies et les caractéristiques fournies.
 	 * 
 	 * @param donnees le jeu de données sur lequel
 	 * 				  reposera la solution.
 	 */
-	public SolutionPMediane(DataPMediane donnees)
+	public SolutionPMediane(DataPMediane donnees, int[] centres,
+			 				int[] affectations, int[] affectationsSecondaires)
 	{
-		
+		this.donnees = donnees;
+		this.centres = centres.clone();
+		this.affectations = affectations.clone();
+		this.affectationsSecondaires = affectationsSecondaires.clone();
+	}
+	
+	/**
+	 * Retourne une copie de la liste des centres ouverts.
+	 * 
+	 * @return une copie de la liste des centres ouverts.
+	 */
+	public int[] getCentres()
+	{
+		return centres.clone();
+	}
+	
+	/**
+	 * Retourne une copie de la liste des affectations.
+	 * 
+	 * @return une copie de la liste des affectations.
+	 */
+	public int[] getAffectations()
+	{
+		return affectations.clone();
+	}
+	
+	/**
+	 * Retourne une copie de la liste des affectations secondaires
+	 * (affectations au deuxième meilleur centre possible).
+	 * 
+	 * @return une copie de la liste des affectations.
+	 */
+	public int[] getAffectationsSecondaires()
+	{
+		return affectationsSecondaires.clone();
 	}
 	
 	/**
@@ -41,7 +76,7 @@ public class SolutionPMediane
 	 */
 	public boolean estCentre(int i)
 	{
-		
+		return (affectations[i] == i);
 	}
 	
 	/**
@@ -53,7 +88,7 @@ public class SolutionPMediane
 	 */
 	public int getCentre(int i)
 	{
-		
+		return affectations[i];
 	}
 	
 	/**
@@ -65,7 +100,7 @@ public class SolutionPMediane
 	 */
 	public int getDistanceCentre(int i)
 	{
-		
+		return donnees.getDistance(i, affectations[i]);
 	}
 	
 	/** 
@@ -78,5 +113,5 @@ public class SolutionPMediane
 	public DataPMediane getDonnees()
 	{
 		return donnees;
-	}	
+	}
 }

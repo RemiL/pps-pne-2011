@@ -1,5 +1,7 @@
 package pmediane;
 
+import java.util.Random;
+
 import pne.Heuristique;
 
 /**
@@ -24,6 +26,39 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 	 */
 	public SolutionPMediane calculerSolution(DataPMediane donnees)
 	{
-		return null;
+		Random rand = new Random();
+		int i, j;
+		
+		int[] alea = new int[donnees.getNbEntites()];
+		int[] centres = new int[donnees.getNbCentres()];
+		int[] affectations = new int[donnees.getNbEntites()];
+		int[] affectationsSecondaires = new int[donnees.getNbEntites()];
+		
+		for (i=0; i<alea.length; i++)
+			alea[i] = i;
+		
+		for (i=0; i<centres.length; i++)
+			centres[i] = alea[rand.nextInt(alea.length - i)];
+		
+		for (i=0; i<affectations.length; i++)
+		{
+			affectations[i] = centres[0];
+			affectationsSecondaires[i] = -1;
+			
+			for (j=1; j<centres.length; j++)
+			{
+				if (donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectations[i]))
+				{
+					affectationsSecondaires[i] = affectations[i];
+					affectations[i] = centres[j];
+				}
+				else if (donnees.getDistance(i, centres[j]) > donnees.getDistance(i, affectations[i])
+						 && (affectationsSecondaires[i] == -1
+							 || donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[i])))
+					affectationsSecondaires[i] = centres[j];
+			}
+		}
+		
+		return new SolutionPMediane(donnees, centres, affectations, affectationsSecondaires);
 	}
 }
