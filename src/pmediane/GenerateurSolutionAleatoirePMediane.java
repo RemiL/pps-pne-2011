@@ -38,7 +38,11 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 			alea[i] = i;
 		
 		for (i=0; i<centres.length; i++)
-			centres[i] = alea[rand.nextInt(alea.length - i)];
+		{
+			j = rand.nextInt(alea.length - i);
+			centres[i] = alea[j];
+			alea[j] = alea[alea.length - i - 1];
+		}
 		
 		for (i=0; i<affectations.length; i++)
 		{
