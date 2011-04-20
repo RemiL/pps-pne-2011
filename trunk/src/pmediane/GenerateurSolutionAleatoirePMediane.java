@@ -56,9 +56,8 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 					affectationsSecondaires[i] = affectations[i];
 					affectations[i] = centres[j];
 				}
-				else if (donnees.getDistance(i, centres[j]) > donnees.getDistance(i, affectations[i])
-						 && (affectationsSecondaires[i] == -1
-							 || donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[i])))
+				else if (affectationsSecondaires[i] == -1
+						 || donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[i]))
 					affectationsSecondaires[i] = centres[j];
 			}
 		}
