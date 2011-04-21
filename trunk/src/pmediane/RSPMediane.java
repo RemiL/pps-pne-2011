@@ -28,6 +28,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 *  palier utilisé par le schéma de refroidissement. */
 	private double tauxDecroissanceTemp;
 	
+	
 	/**
 	 * Crée une instance de l'heuristique du recuit simulé spécialisée
 	 * pour traiter le problème de la p-médiane avec les paramètres
@@ -46,6 +47,9 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 			   		  Voisinage<SolutionPMediane> voisinage, Heuristique<DataPMediane, SolutionPMediane> heuristiqueSolInitiale)
 	{
 		super(tempInitiale, new FonctionObjectifPMediane(), voisinage, heuristiqueSolInitiale);
+		this.tempArret = tempArret;
+		this.nbIterationsMaxPalier = nbIterationsPalier;
+		this.tauxDecroissanceTemp = tauxDecroissanceTemp;
 	}
 	
 	/**
@@ -65,7 +69,11 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	public RSPMediane()
 	{
-		
+		super(TEMP_INIT_AUTO, new FonctionObjectifPMediane(), new VoisinagePMediane(), new HeuristiqueGloutonnePMediane());
+
+		this.tempArret = 0.001;
+		this.nbIterationsMaxPalier = donnees.getNbEntites();
+		this.tauxDecroissanceTemp = 0.90;
 	}
 	
 	/**
@@ -79,7 +87,10 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	protected boolean estAtteinteConditionArret()
 	{
-		return false;
+		if(temp == tempArret) 
+			return true;
+		else 
+			return false;
 	}
 
 	/**
@@ -102,7 +113,10 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	protected boolean estAtteinteConditionChangementPalier()
 	{
-		return false;
+		if(nbIterationsPalier == nbIterationsMaxPalier)
+			return true;
+		else 
+			return false;
 	}
 
 	/**
@@ -114,6 +128,12 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	protected void majConditionChangementPalier(boolean init)
 	{
+		if(init)
+		{
+			nbIterationsPalier = 0;
+		}
+		else 
+			nbIterationsPalier++;
 		
 	}
 	
@@ -122,6 +142,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 * la température décroit selon la suite géométrique
 	 * T(n+1) = tauxDecroissance * T(n).
 	 */
+	/*TODO*/
 	protected void appliquerRefroidissement()
 	{
 		
