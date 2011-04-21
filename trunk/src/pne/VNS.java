@@ -42,7 +42,8 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	 */
 	public VNS(FonctionObjectif<Solution> f, Heuristique<Data, Solution> heuristiqueSolInitiale)
 	{
-		
+		this.f = f;
+		this.heuristiqueSolInitiale = heuristiqueSolInitiale;
 	}
 	
 	/**
@@ -52,9 +53,32 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	 * 
 	 * @param donnees les données auxquelles appliquer l'heuristique.
 	 */
+	/*TODO à verifier*/
 	public Solution calculerSolution(Data donnees)
 	{
-		return null;
+		//calcul de la solution initiale en fonction des donnees
+		Solution sol = heuristiqueSolInitiale.calculerSolution(donnees);
+		while(!estAtteinteConditionArret())
+		{
+			k = 1;
+			while(k < kMax)
+			{
+				//on génère une solution aléatoire dans le voisinage kieme
+				Solution solVariable = choisirSolutionVoisinageCourant();
+				//on génère une solution locale à partir de cette solution aléatoire pour obtenir un optimum local
+				Solution solLocale = rechercheLocale(solVariable);
+				//mouvement
+				if(f.estAmelioration(f.calculer(solLocale), f.calculer(sol)))
+				{
+					sol = solLocale;
+					k = 0;
+				}
+				else 
+					k++;
+			}
+		}
+		
+		return sol;
 	}
 	
 	/**
