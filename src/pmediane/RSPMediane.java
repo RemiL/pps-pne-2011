@@ -1,6 +1,5 @@
 package pmediane;
 
-import pne.FonctionObjectif;
 import pne.Heuristique;
 import pne.RecuitSimule;
 import pne.Voisinage;
@@ -16,6 +15,10 @@ import pne.Voisinage;
  */
 public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 {
+	/** Mode de détermination automatique du
+	 *  nombre d'itérations par palier. */
+	public static final int NB_PALIERS_AUTO = -1;
+	
 	/** La température à laquelle on considère
 	 *  le système comme gelé et on arrête la
 	 *  recherche. */
@@ -28,7 +31,6 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 *  palier utilisé par le schéma de refroidissement. */
 	private double tauxDecroissanceTemp;
 	
-	
 	/**
 	 * Crée une instance de l'heuristique du recuit simulé spécialisée
 	 * pour traiter le problème de la p-médiane avec les paramètres
@@ -37,13 +39,13 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 * @param tempInitiale la température initiale.
 	 * @param tempArret la température d'arrêt de la recherche.
 	 * @param nbIterationsPalier le nombre d'itérations par palier.
-	 * @param tauxDecroissanteTemp le taux de décroissance de la température
+	 * @param tauxDecroissanceTemp le taux de décroissance de la température
 	 * 		 					   à chaque palier.
 	 * @param voisinage le voisinage à utiliser.
 	 * @param heuristiqueSolInitiale l'heuristique à utiliser pour trouver
 	 * 								 la solution initiale.
 	 */
-	public RSPMediane(double tempInitiale, double tempArret, int nbIterationsPalier, double tauxDecroissanteTemp,
+	public RSPMediane(double tempInitiale, double tempArret, int nbIterationsPalier, double tauxDecroissanceTemp,
 			   		  Voisinage<SolutionPMediane> voisinage, Heuristique<DataPMediane, SolutionPMediane> heuristiqueSolInitiale)
 	{
 		super(tempInitiale, new FonctionObjectifPMediane(), voisinage, heuristiqueSolInitiale);
@@ -72,7 +74,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 		super(TEMP_INIT_AUTO, new FonctionObjectifPMediane(), new VoisinagePMediane(), new HeuristiqueGloutonnePMediane());
 
 		this.tempArret = 0.001;
-		this.nbIterationsMaxPalier = donnees.getNbEntites();
+		this.nbIterationsMaxPalier = NB_PALIERS_AUTO;
 		this.tauxDecroissanceTemp = 0.90;
 	}
 	
@@ -87,10 +89,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	protected boolean estAtteinteConditionArret()
 	{
-		if(temp == tempArret) 
-			return true;
-		else 
-			return false;
+		return (temp <= tempArret);
 	}
 
 	/**
@@ -113,10 +112,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	protected boolean estAtteinteConditionChangementPalier()
 	{
-		if(nbIterationsPalier == nbIterationsMaxPalier)
-			return true;
-		else 
-			return false;
+		return (nbIterationsPalier == nbIterationsMaxPalier || nbIterationsPalier == donnees.getNbEntites());
 	}
 
 	/**
@@ -128,13 +124,10 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 */
 	protected void majConditionChangementPalier(boolean init)
 	{
-		if(init)
-		{
+		if (init)
 			nbIterationsPalier = 0;
-		}
 		else 
 			nbIterationsPalier++;
-		
 	}
 	
 	/**
@@ -142,10 +135,9 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 * la température décroit selon la suite géométrique
 	 * T(n+1) = tauxDecroissance * T(n).
 	 */
-	/*TODO*/
 	protected void appliquerRefroidissement()
 	{
-		
+		temp *= tauxDecroissanceTemp;
 	}
 	
 	/**
@@ -195,5 +187,4 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	{
 		this.nbIterationsPalier = nbIterationsPalier;
 	}
-	
 }
