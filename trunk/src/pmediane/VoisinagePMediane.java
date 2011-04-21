@@ -55,7 +55,7 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 			// Le centre de l'entité a été fermé
 			if (affectations[i] == ancienCentre)
 			{
-				// Si le nouveau centre est meilleur que l'ancien
+				// Si le nouveau centre est meilleur que le
 				// deuxième meilleur centre.
 				if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
 					affectations[i] = nouveauCentre;
@@ -84,6 +84,18 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 				// l'ancien deuxième meilleur centre.
 				else if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
 					affectationsSecondaires[i] = nouveauCentre;
+				// Si le deuxième meilleur centre était celui qui a
+				// été fermé, il faut le remplacer.
+				else if (affectationsSecondaires[i] == ancienCentre)
+				{
+					affectationsSecondaires[i] = nouveauCentre;
+					for (j=0; j<centres.length; j++)
+					{
+						if (centres[j] != ancienCentre && centres[j] != affectations[i]
+						    && donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[j]))
+							affectationsSecondaires[i] = centres[j];
+					}
+				}
 			}
 		}
 		
@@ -150,6 +162,18 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 					// l'ancien deuxième meilleur centre.
 					else if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
 						affectationsSecondaires[i] = nouveauCentre;
+					// Si le deuxième meilleur centre était celui qui a
+					// été fermé, il faut le remplacer.
+					else if (affectationsSecondaires[i] == ancienCentre)
+					{
+						affectationsSecondaires[i] = nouveauCentre;
+						for (j=0; j<centres.length; j++)
+						{
+							if (centres[j] != ancienCentre && centres[j] != affectations[i]
+							    && donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[j]))
+								affectationsSecondaires[i] = centres[j];
+						}
+					}
 				}
 			}
 			
