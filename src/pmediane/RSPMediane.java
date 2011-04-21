@@ -126,4 +126,53 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	{
 		
 	}
+	
+	/**
+	 * Retourne la température d'arrêt de la recherche
+	 * de la solution pour laquelle on considère le système
+	 * comme gelé.
+	 * 
+	 * @return la température d'arrêt du recuit simulé.
+	 */
+	public double getTempArret()
+	{
+		return tempArret;
+	}
+	
+	/**
+	 * Fixe à la valeur fournie la température d'arrêt
+	 * de la recherche de la solution pour laquelle on
+	 * considère le système comme gelé.
+	 * 
+	 * @param tempArret la température d'arrêt du recuit
+	 * 					simulé.
+	 */
+	public void setTempArret(double tempArret)
+	{
+		this.tempArret = tempArret;
+	}
+
+	/**
+	 * Retourne le nombre d'itérations par palier de
+	 * température.
+	 * 
+	 * @return le nombre d'itérations par palier.
+	 */
+	public int getNbIterationsPalier()
+	{
+		return nbIterationsPalier;
+	}
+
+	/**
+	 * Fixe le nombre d'itérations par palier de
+	 * température à la valeur fournie.
+	 * 
+	 * @param nbIterationsPalier le nombre d'itérations
+	 * 							 par palier.
+	 */
+	public void setNbIterationsPalier(int nbIterationsPalier)
+	{
+		this.nbIterationsPalier = nbIterationsPalier;
+	}
+	
 }

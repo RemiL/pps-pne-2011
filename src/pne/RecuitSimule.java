@@ -51,7 +51,10 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 						   Voisinage<Solution> voisinage,
 						   Heuristique<Data, Solution> heuristiqueSolInitiale)
 	{
-		
+		this.tempInitiale = tempInitiale;
+		this.f = f;
+		this.voisinage = voisinage;
+		this.heuristiqueSolInitiale = heuristiqueSolInitiale;
 	}
 	
 	/**
@@ -61,9 +64,34 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 * 
 	 * @param donnees les données auxquelles appliquer l'heuristique.
 	 */
+	
+	/*TODO il faut vérifier cette fonction...j'ai utilise des valeurs temporaires et je sais pas si c'est bon */
 	public Solution calculerSolution(Data donnees)
 	{
-		return null;
+		//calcul de la solution initiale en fonction des donnees
+		Solution sol = heuristiqueSolInitiale.calculerSolution(donnees);
+		//initialisation de la température initiale
+		tempInitiale = determinerTempInitiale();
+		
+		do{
+			//recherche d'une solution voisine à la solution intiiale
+			Solution solVoisin = voisinage.genererSolution(sol);
+			int delta = f.calculer(solVoisin)- f.calculer(sol);
+			//si il y a amélioration de la solution alors on accepte cette solution
+			if(f.estAmelioration(f.calculer(solVoisin), f.calculer(sol)))
+				sol = solVoisin;
+			//si il y a dégradation alors on utilise le critere de metropolis pour voir si on accepte la solution
+			else if (verifierAcceptationDegradation(delta))
+			{
+				sol = solVoisin;
+			}
+			//mise à jour de T en fonction du schema de refroidissement
+			appliquerRefroidissement();
+			
+		}while(!estAtteinteConditionArret());
+		
+		return sol;
+		
 	}
 	
 	/**
@@ -117,7 +145,11 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 */
 	private boolean verifierAcceptationDegradation(int delta)
 	{
-		return false;
+		if(Math.exp(- delta / temp) <= Math.random())
+		{
+			return true;
+		}
+		else return false;
 	}
 	
 	/**
@@ -127,6 +159,7 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 * 
 	 * @return la température initiale à utiliser.
 	 */
+	/*TODO*/
 	private double determinerTempInitiale()
 	{
 		return 0.0;
@@ -161,54 +194,6 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	public void setTempInitiale(double tempInitiale)
 	{
 		this.tempInitiale = tempInitiale;
-	}
-	
-	/**
-	 * Retourne la température d'arrêt de la recherche
-	 * de la solution pour laquelle on considère le système
-	 * comme gelé.
-	 * 
-	 * @return la température d'arrêt du recuit simulé.
-	 */
-	public double getTempArret()
-	{
-		return tempArret;
-	}
-	
-	/**
-	 * Fixe à la valeur fournie la température d'arrêt
-	 * de la recherche de la solution pour laquelle on
-	 * considère le système comme gelé.
-	 * 
-	 * @param tempArret la température d'arrêt du recuit
-	 * 					simulé.
-	 */
-	public void setTempArret(double tempArret)
-	{
-		this.tempArret = tempArret;
-	}
-
-	/**
-	 * Retourne le nombre d'itérations par palier de
-	 * température.
-	 * 
-	 * @return le nombre d'itérations par palier.
-	 */
-	public int getNbIterationsPalier()
-	{
-		return nbIterationsPalier;
-	}
-
-	/**
-	 * Fixe le nombre d'itérations par palier de
-	 * température à la valeur fournie.
-	 * 
-	 * @param nbIterationsPalier le nombre d'itérations
-	 * 							 par palier.
-	 */
-	public void setNbIterationsPalier(int nbIterationsPalier)
-	{
-		this.nbIterationsPalier = nbIterationsPalier;
 	}
 	
 	/**
