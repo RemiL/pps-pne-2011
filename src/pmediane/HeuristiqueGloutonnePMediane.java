@@ -1,7 +1,5 @@
 package pmediane;
 
-import java.util.Random;
-
 import pne.Heuristique;
 
 /**
