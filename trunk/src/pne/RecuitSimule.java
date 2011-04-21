@@ -25,6 +25,9 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	protected double tempInitiale;
 	/** La fonction objectif. */
 	protected FonctionObjectif<Solution> f;
+	/** L'instance du problème pour lequel on
+	 * 	cherche actuellement une solution. */
+	protected Data donnees;
 	/** La meilleure valeur de la fonction
 	 *  objectif obtenue jusqu'à présent. */
 	protected int meilleureValObj;
@@ -36,7 +39,6 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	/** L'heuristique utilisée pour le choix
 	 *  de la solution initiale. */
 	protected Heuristique<Data, Solution> heuristiqueSolInitiale;
-	protected Data donnees;
 	
 	/**
 	 * Crée une instance de l'heuristique du recuit simulé générique
@@ -65,35 +67,65 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 * 
 	 * @param donnees les données auxquelles appliquer l'heuristique.
 	 */
-	
-	/*TODO il faut vérifier cette fonction...j'ai utilise des valeurs temporaires et je sais pas si c'est bon */
 	public Solution calculerSolution(Data donnees)
 	{
+		Solution sol, solVoisine;
+		int valObj, valObjPrec;
 		this.donnees = donnees;
-		//calcul de la solution initiale en fonction des donnees
-		Solution sol = heuristiqueSolInitiale.calculerSolution(donnees);
-		//initialisation de la température initiale
-		tempInitiale = determinerTempInitiale();
 		
-		do{
-			//recherche d'une solution voisine à la solution intiiale
-			Solution solVoisin = voisinage.genererSolution(sol);
-			int delta = f.calculer(solVoisin)- f.calculer(sol);
-			//si il y a amélioration de la solution alors on accepte cette solution
-			if(f.estAmelioration(f.calculer(solVoisin), f.calculer(sol)))
-				sol = solVoisin;
-			//si il y a dégradation alors on utilise le critere de metropolis pour voir si on accepte la solution
-			else if (verifierAcceptationDegradation(delta))
+		// calcul de la solution initiale en fonction des donnees
+		meilleureSolution = sol = heuristiqueSolInitiale.calculerSolution(donnees);
+		meilleureValObj = valObjPrec = f.calculer(sol);
+		
+		// initialisation de la température initiale
+		if (tempInitiale == TEMP_INIT_AUTO)
+			temp = determinerTempInitiale();
+		else
+			temp = tempInitiale;
+		
+		majConditionArret(true);
+		
+		do
+		{
+			majConditionChangementPalier(true);
+			
+			do
 			{
-				sol = solVoisin;
-			}
-			//mise à jour de T en fonction du schema de refroidissement
+				// recherche d'une solution voisine à la solution intiiale
+				solVoisine = voisinage.genererSolution(sol);
+				valObj = f.calculer(solVoisine);
+				
+				// s'il y a amélioration de la solution alors on accepte cette solution
+				if (f.estAmelioration(valObj, valObjPrec))
+				{
+					sol = solVoisine;
+					valObjPrec = valObj;
+					
+					// Il se peut qu'on améliore la meilleure solution trouvée
+					if (f.estAmelioration(valObj, meilleureValObj))
+					{
+						meilleureSolution = solVoisine;
+						meilleureValObj = valObj;
+					}
+				}
+				// s'il y a dégradation alors on utilise le critere de metropolis pour voir
+				// si on accepte la solution quand même
+				else if (verifierAcceptationDegradation(valObj - valObjPrec))
+				{
+					sol = solVoisine;
+					valObjPrec = valObj;
+				}
+				
+				majConditionChangementPalier(false);
+			} while (!estAtteinteConditionChangementPalier());
+			
+			// mise à jour de T en fonction du schema de refroidissement
 			appliquerRefroidissement();
 			
-		}while(!estAtteinteConditionArret());
+			majConditionArret(false);
+		} while (!estAtteinteConditionArret());
 		
-		return sol;
-		
+		return meilleureSolution;
 	}
 	
 	/**
@@ -147,11 +179,10 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 */
 	private boolean verifierAcceptationDegradation(int delta)
 	{
-		if(Math.exp(- delta / temp) <= Math.random())
-		{
-			return true;
-		}
-		else return false;
+		if (f.estMaximisation())
+			delta = - delta;
+		
+		return (Math.random() <= Math.exp(- delta / temp));
 	}
 	
 	/**
@@ -161,10 +192,62 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 * 
 	 * @return la température initiale à utiliser.
 	 */
-	/*TODO*/
 	private double determinerTempInitiale()
 	{
-		return 0.0;
+		Solution sol = meilleureSolution, solVoisine;
+		int valObj, valObjPrec = meilleureValObj;
+		int nbDegradations, nbDegradationsAcceptees;
+		double tauxAcceptation;
+		
+		temp = 1000;
+		
+		do
+		{
+			nbDegradations = nbDegradationsAcceptees = 0;
+			
+			majConditionChangementPalier(true);
+			
+			do
+			{
+				// recherche d'une solution voisine à la solution intiiale
+				solVoisine = voisinage.genererSolution(sol);
+				valObj = f.calculer(solVoisine);
+				
+				// s'il y a amélioration de la solution alors on accepte cette solution
+				if (f.estAmelioration(valObj, valObjPrec))
+				{
+					sol = solVoisine;
+					valObjPrec = valObj;
+				}
+				else 
+				{
+					nbDegradations++;
+					
+					// s'il y a dégradation alors on utilise le critere de metropolis pour voir
+					// si on accepte la solution quand même
+					if (verifierAcceptationDegradation(valObj - valObjPrec))
+					{
+						nbDegradationsAcceptees++;
+						
+						sol = solVoisine;
+						valObjPrec = valObj;
+					}
+				}
+				
+				majConditionChangementPalier(false);
+			} while (!estAtteinteConditionChangementPalier());
+			
+			tauxAcceptation = (double)nbDegradationsAcceptees / nbDegradations;
+			
+			if (tauxAcceptation < 0.80)
+				temp *= 2;
+			else if (tauxAcceptation > 0.85)
+				temp -= 2;
+		} while (tauxAcceptation < 0.80 || tauxAcceptation > 0.85);
+		
+		System.out.println("T init = "+temp+" - "+tauxAcceptation*100+"%");
+		
+		return temp;
 	}
 	
 	/**
