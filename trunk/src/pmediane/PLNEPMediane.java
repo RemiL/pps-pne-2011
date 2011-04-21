@@ -13,6 +13,9 @@ import pne.PLNE;
  */
 public class PLNEPMediane extends PLNE
 {	
+	/** L'instance du problème correspondant à ce PNLE. */
+	private DataPMediane donnees;
+	
 	/**
 	 * Construit le programme linéaire en nombres entiers
 	 * correspondant à l'instance fournie du problème de
@@ -23,6 +26,7 @@ public class PLNEPMediane extends PLNE
 	@SuppressWarnings("unchecked")
 	public PLNEPMediane(DataPMediane donnees)
 	{
+		this.donnees = donnees;
 		nbVariables = donnees.getNbEntites()*donnees.getNbEntites();
 		nomsVariables = new String[nbVariables];
 		typesVariables = new TypeVar[nbVariables];
@@ -77,5 +81,16 @@ public class PLNEPMediane extends PLNE
 				typesContraintes[(i+1)*donnees.getNbEntites() + j+1] = TypeContrainte.INF_EGAL;
 			}
 		}
+	}
+	
+	/**
+	 * Retourne le jeu de données ayant permis de construire
+	 * ce programme linéaire en nombres entiers.
+	 * 
+	 * @return le jeu de données ayant permis de construire le PLNE.
+	 */
+	public DataPMediane getDonnees()
+	{
+		return donnees;
 	}
 }
