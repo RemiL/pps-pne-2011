@@ -1,5 +1,7 @@
 package pne;
 
+import java.util.HashMap;
+
 /**
  * Classe générique permettant de manipuler des programmes
  * linéaires en nombres entiers caractérisé par ses variables,
@@ -42,9 +44,10 @@ public abstract class PLNE
 	/** L'objectif à atteindre, à savoir minimiser ou
 	 *  maximiser la valeur de la fonction objectif. */
 	protected TypeObjectif typeObjectif;
-	/** La matrice des contraintes. La dernière valeur
-	 *  correspond à la partie droite de la contrainte. */
-	protected int[][] contraintes;
+	/** La matrice des contraintes. */
+	protected HashMap<Integer, Integer>[] contraintes;
+	/** Les seconds membres des contraintes */
+	protected int[] secondsMembresContraintes;
 	/** Le type des contraintes (<=, =, >=). */
 	protected TypeContrainte[] typesContraintes;
 	
@@ -103,14 +106,22 @@ public abstract class PLNE
 	
 	/**
 	 * Retourne la matrice des coefficients des contraintes.
-	 * Le dernier coefficient correspond à la partie droite
-	 * de l'expression.
 	 * 
 	 * @return la matrice des coefficients des contraintes.
 	 */
-	public int[][] getContraintes()
+	public HashMap<Integer, Integer>[] getContraintes()
 	{
 		return contraintes;
+	}
+	
+	/**
+	 * Retourne les seconds membres des contraintes.
+	 * 
+	 * @return la seconds membres des contraintes.
+	 */
+	public int[] getSecondsMembresContraintes()
+	{
+		return secondsMembresContraintes;
 	}
 	
 	/**
