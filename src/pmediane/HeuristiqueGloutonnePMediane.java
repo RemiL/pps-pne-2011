@@ -63,6 +63,7 @@ public class HeuristiqueGloutonnePMediane implements Heuristique<DataPMediane, S
 			affectationsSecondairesPrec[i] = -1;
 		}
 		dispo[meilleurCentre] = dispo[dispo.length - 1];
+		centres[0] = meilleurCentre;
 		
 		// On ouvre ensuite les autres centres
 		for (int nbCentres=1; nbCentres<centres.length; nbCentres++)
@@ -78,7 +79,7 @@ public class HeuristiqueGloutonnePMediane implements Heuristique<DataPMediane, S
 				{
 					if (donnees.getDistance(i, centre) < donnees.getDistance(i, affectationsPrec[i]))
 					{
-						affectationsSecondairesTmp[i] = affectationsTmp[i];
+						affectationsSecondairesTmp[i] = affectationsPrec[i];
 						affectationsTmp[i] = centre;
 					}
 					else
@@ -88,6 +89,8 @@ public class HeuristiqueGloutonnePMediane implements Heuristique<DataPMediane, S
 						if (affectationsSecondairesPrec[i] == -1
 							|| donnees.getDistance(i, centre) < donnees.getDistance(i, affectationsSecondairesPrec[i]))
 							affectationsSecondairesTmp[i] = centre;
+						else
+							affectationsSecondairesTmp[i] = affectationsSecondairesPrec[i];
 					}
 					
 					valTmp += donnees.getDistance(i, affectationsTmp[i]);
@@ -103,6 +106,8 @@ public class HeuristiqueGloutonnePMediane implements Heuristique<DataPMediane, S
 			}
 			
 			dispo[meilleurCentre] = dispo[dispo.length - nbCentres - 1];
+			centres[nbCentres] = meilleurCentre;
+			
 			affectationsPrec = affectations.clone();
 			affectationsSecondairesPrec = affectationsSecondaires.clone();
 		}
