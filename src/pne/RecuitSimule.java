@@ -36,6 +36,7 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	/** L'heuristique utilisée pour le choix
 	 *  de la solution initiale. */
 	protected Heuristique<Data, Solution> heuristiqueSolInitiale;
+	protected Data donnees;
 	
 	/**
 	 * Crée une instance de l'heuristique du recuit simulé générique
@@ -68,6 +69,7 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	/*TODO il faut vérifier cette fonction...j'ai utilise des valeurs temporaires et je sais pas si c'est bon */
 	public Solution calculerSolution(Data donnees)
 	{
+		this.donnees = donnees;
 		//calcul de la solution initiale en fonction des donnees
 		Solution sol = heuristiqueSolInitiale.calculerSolution(donnees);
 		//initialisation de la température initiale
