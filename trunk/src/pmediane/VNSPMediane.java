@@ -48,6 +48,8 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 					   Heuristique<DataPMediane, SolutionPMediane> heuristiqueSolInitiale)
 	{
 		super(new FonctionObjectifPMediane(), heuristiqueSolInitiale);
+		this.nbMaxIterationsSansAmelioration = nbMaxIterationsSansAmelioration;
+		this.voisinage = voisinage;
 	}
 	
 	/**
@@ -65,7 +67,9 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	public VNSPMediane()
 	{
-		
+		super(new FonctionObjectifPMediane(), new HeuristiqueGloutonnePMediane());
+		this.nbMaxIterationsSansAmelioration = 25;
+		this.voisinage = new VoisinagePMediane();
 	}
 	
 	/**
@@ -78,7 +82,10 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected boolean estAtteinteConditionArret()
 	{
-		return false;
+		if(nbIterationsSansAmelioration == nbMaxIterationsSansAmelioration) 
+			return true;
+		else 
+			return false;
 	}
 	
 	/**
@@ -90,7 +97,14 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected void majConditionArret(boolean init)
 	{
-		
+		if(init)
+		{
+			nbIterationsSansAmelioration = 0;
+		}
+		else if(!estAtteinteConditionArret())
+		{
+			nbIterationsSansAmelioration++;
+		}
 	}
 	
 	/**
@@ -102,7 +116,7 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected SolutionPMediane choisirSolutionVoisinageCourant()
 	{
-		return null;
+		return voisinage.genererSolution(meilleureSolution, k);
 	}
 
 	/**
@@ -116,6 +130,6 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected SolutionPMediane rechercheLocale(SolutionPMediane s)
 	{
-		return null;
+		return voisinage.rechercherMeilleureSolution(s, k, f);
 	}
 }

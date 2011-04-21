@@ -71,6 +71,7 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 				if(f.estAmelioration(f.calculer(solLocale), f.calculer(sol)))
 				{
 					sol = solLocale;
+					meilleureSolution = sol;
 					k = 0;
 				}
 				else 
@@ -78,7 +79,7 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 			}
 		}
 		
-		return sol;
+		return meilleureSolution;
 	}
 	
 	/**
