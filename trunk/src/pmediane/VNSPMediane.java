@@ -1,6 +1,5 @@
 package pmediane;
 
-import pne.FonctionObjectif;
 import pne.Heuristique;
 import pne.VNS;
 import pne.VoisinageTailleVariable;
@@ -71,6 +70,16 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 		this.nbMaxIterationsSansAmelioration = 25;
 		this.voisinage = new VoisinagePMediane();
 	}
+
+	/**
+	 * Initialise kMax à au nombre de centres à ouvrir
+	 * puisqu'on peut au maximum procéder aux changements
+	 * de tous les centres.
+	 */
+	protected void initialiserKMax()
+	{
+		kMax = donnees.getNbCentres();
+	}
 	
 	/**
 	 * Teste si la condition d'arrêt de l'heuristique est atteinte,
@@ -82,10 +91,7 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected boolean estAtteinteConditionArret()
 	{
-		if(nbIterationsSansAmelioration == nbMaxIterationsSansAmelioration) 
-			return true;
-		else 
-			return false;
+		return (nbIterationsSansAmelioration == nbMaxIterationsSansAmelioration);
 	}
 	
 	/**
@@ -97,14 +103,12 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected void majConditionArret(boolean init)
 	{
-		if(init)
-		{
+		if (init || valObjSauvegardee < meilleureValObj)
 			nbIterationsSansAmelioration = 0;
-		}
-		else if(!estAtteinteConditionArret())
-		{
+		else
 			nbIterationsSansAmelioration++;
-		}
+		
+		valObjSauvegardee = meilleureValObj;
 	}
 	
 	/**

@@ -17,6 +17,9 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 {
 	/** La fonction objectif. */
 	protected FonctionObjectif<Solution> f;
+	/** L'instance du problème pour lequel on
+	 * 	cherche actuellement une solution. */
+	protected Data donnees;
 	/** La meilleure valeur de la fonction
 	 *  objectif obtenue jusqu'à présent. */
 	protected int meilleureValObj;
@@ -53,34 +56,56 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 	 * 
 	 * @param donnees les données auxquelles appliquer l'heuristique.
 	 */
-	/*TODO à verifier*/
 	public Solution calculerSolution(Data donnees)
 	{
-		//calcul de la solution initiale en fonction des donnees
-		Solution sol = heuristiqueSolInitiale.calculerSolution(donnees);
-		while(!estAtteinteConditionArret())
+		Solution sol;
+		int valObj;
+		
+		this.donnees = donnees;
+		
+		initialiserKMax();
+		
+		// calcul de la solution initiale en fonction des donnees
+		meilleureSolution = heuristiqueSolInitiale.calculerSolution(donnees);
+		meilleureValObj = f.calculer(meilleureSolution);
+		
+		majConditionArret(true);
+		
+		do
 		{
 			k = 1;
-			while(k < kMax)
+			
+			while (k < kMax)
 			{
-				//on génère une solution aléatoire dans le voisinage kieme
-				Solution solVariable = choisirSolutionVoisinageCourant();
-				//on génère une solution locale à partir de cette solution aléatoire pour obtenir un optimum local
-				Solution solLocale = rechercheLocale(solVariable);
-				//mouvement
-				if(f.estAmelioration(f.calculer(solLocale), f.calculer(sol)))
+				// on génère une solution aléatoire dans le voisinage k-ième.
+				sol = choisirSolutionVoisinageCourant();
+				
+				// on procède à une recherche locale à partir de cette
+				// solution aléatoire pour obtenir un optimum local.
+				sol = rechercheLocale(sol);
+				
+				valObj = f.calculer(sol);
+				
+				// mouvement
+				if (f.estAmelioration(valObj, meilleureValObj))
 				{
-					sol = solLocale;
 					meilleureSolution = sol;
-					k = 0;
+					k = 1;
 				}
 				else 
 					k++;
 			}
-		}
+			
+			majConditionArret(false);
+		} while (!estAtteinteConditionArret());
 		
 		return meilleureSolution;
 	}
+	
+	/**
+	 * Initialise kMax.
+	 */
+	protected abstract void initialiserKMax();
 	
 	/**
 	 * Teste si la condition d'arrêt choisie de l'heuristique
