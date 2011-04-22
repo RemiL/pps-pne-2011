@@ -67,7 +67,7 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	public VNSPMediane()
 	{
 		super(new FonctionObjectifPMediane(), new HeuristiqueGloutonnePMediane());
-		this.nbMaxIterationsSansAmelioration = 25;
+		this.nbMaxIterationsSansAmelioration = 250;
 		this.voisinage = new VoisinagePMediane();
 	}
 
@@ -134,6 +134,6 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected SolutionPMediane rechercheLocale(SolutionPMediane s)
 	{
-		return voisinage.rechercherMeilleureSolution(s, k, f);
+		return voisinage.rechercherMeilleureSolution(s, 1, f);
 	}
 }
