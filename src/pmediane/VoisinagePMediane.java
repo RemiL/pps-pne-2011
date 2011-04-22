@@ -22,12 +22,16 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 {
 	private static Random rand = new Random();
 	
-	private int i, j, c;
+	private DataPMediane donnees;
+	private int i, j, c, a;
 	private int ancienCentre, nouveauCentre;
 	private int[] centres;
 	private int[] affectations;
 	private int[] affectationsSecondaires;
-	private DataPMediane donnees;
+	private SolutionPMediane sol;
+	private int[][] dispos;
+	private int[] nbDispos;
+	int valObj, meilleureValObj;
 	
 	/**
 	 * Génère une solution au problème de la p-médiane appartenant
@@ -195,7 +199,123 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	 */
 	public SolutionPMediane rechercherMeilleureSolution(SolutionPMediane s, FonctionObjectif<SolutionPMediane> f)
 	{
-		return null;
+		/*SolutionPMediane sol;
+		int valObj, meilleureValObj = f.calculer(s);
+		
+		for (int i=0; i<s.getDonnees().getNbEntites(); i++)
+		{
+			sol = genererSolution(s);
+			valObj = f.calculer(sol);
+			
+			if (f.estAmelioration(valObj, meilleureValObj))
+			{
+				s = sol;
+				meilleureValObj = valObj;
+			}
+		}
+		
+		return s;*/
+
+		dispos = new int[donnees.getNbCentres()][donnees.getNbEntites()];
+		nbDispos = new int[donnees.getNbCentres()];
+		for (i=0; i<nbDispos.length; i++)
+		{
+			nbDispos[i] = dispos[i].length;
+			
+			for (j=0; j<dispos[i].length; j++)
+			{
+				dispos[i][j] = j;
+			}
+		}
+		
+		donnees = s.getDonnees();
+		centres = s.getCentres();
+		affectations = s.getAffectations();
+		affectationsSecondaires = s.getAffectationsSecondaires();
+		meilleureValObj = f.calculer(s);
+		
+		for (int n=0; n<donnees.getNbCentres(); n++)
+		{
+			c = rand.nextInt(centres.length);
+			while (nbDispos[c] <= 0)
+				c = (c+1) % centres.length;
+			ancienCentre = centres[c];
+			
+			do
+			{
+				a = rand.nextInt(nbDispos[c]);
+				nouveauCentre = dispos[c][a];
+				if (affectations[nouveauCentre] == nouveauCentre)
+				{
+					dispos[c][a] = dispos[c][nbDispos[c]-1];
+					nbDispos[c]--;
+				}
+			} while (affectations[nouveauCentre] == nouveauCentre);
+			dispos[c][a] = dispos[c][nbDispos[c]-1];
+			nbDispos[c]--;
+			
+			for (i=0; i<affectations.length; i++)
+			{
+				// Le centre de l'entité a été fermé
+				if (affectations[i] == ancienCentre)
+				{
+					// Si le nouveau centre est meilleur que le
+					// deuxième meilleur centre.
+					if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
+						affectations[i] = nouveauCentre;
+					else // Sinon on doit retrouver le nouveau deuxième meilleur centre
+					{
+						affectations[i] = affectationsSecondaires[i];
+						
+						affectationsSecondaires[i] = nouveauCentre;
+						for (j=0; j<centres.length; j++)
+						{
+							if (centres[j] != ancienCentre && centres[j] != affectations[i]
+							    && donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[j]))
+								affectationsSecondaires[i] = centres[j];
+						}
+					}
+				}
+				else // Le centre de l'entité i n'a pas été fermé
+				{
+					// Si le nouveau centre est meilleur que l'ancien
+					if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectations[i]))
+					{
+						affectationsSecondaires[i] = affectations[i];
+						affectations[i] = nouveauCentre;
+					}
+					// Sinon le nouveau centre peut être meilleur que
+					// l'ancien deuxième meilleur centre.
+					else if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
+						affectationsSecondaires[i] = nouveauCentre;
+					// Si le deuxième meilleur centre était celui qui a
+					// été fermé, il faut le remplacer.
+					else if (affectationsSecondaires[i] == ancienCentre)
+					{
+						affectationsSecondaires[i] = nouveauCentre;
+						for (j=0; j<centres.length; j++)
+						{
+							if (centres[j] != ancienCentre && centres[j] != affectations[i]
+							    && donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[j]))
+								affectationsSecondaires[i] = centres[j];
+						}
+					}
+				}
+			}
+			
+			centres[c] = nouveauCentre;
+			
+			sol = new SolutionPMediane(donnees, centres, affectations, affectationsSecondaires);
+			valObj = f.calculer(sol);
+			
+			if (f.estAmelioration(valObj, meilleureValObj))
+			{
+				s = sol;
+				meilleureValObj = valObj;
+			}
+		}
+		
+		return s;
 	}
 	
 	/**
@@ -210,6 +330,6 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	 */
 	public SolutionPMediane rechercherMeilleureSolution(SolutionPMediane s,	int k, FonctionObjectif<SolutionPMediane> f)
 	{
-		return null;
+		return rechercherMeilleureSolution(s, f);
 	}
 }
