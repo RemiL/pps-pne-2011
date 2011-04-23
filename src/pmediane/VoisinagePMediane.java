@@ -229,13 +229,14 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 		}
 		
 		donnees = s.getDonnees();
-		centres = s.getCentres();
-		affectations = s.getAffectations();
-		affectationsSecondaires = s.getAffectationsSecondaires();
 		meilleureValObj = f.calculer(s);
 		
 		for (int n=0; n<donnees.getNbCentres(); n++)
 		{
+			centres = s.getCentres();
+			affectations = s.getAffectations();
+			affectationsSecondaires = s.getAffectationsSecondaires();
+			
 			c = rand.nextInt(centres.length);
 			while (nbDispos[c] <= 0)
 				c = (c+1) % centres.length;
@@ -312,6 +313,16 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 			{
 				s = sol;
 				meilleureValObj = valObj;
+				
+				for (i=0; i<nbDispos.length; i++)
+				{
+					nbDispos[i] = dispos[i].length;
+					
+					for (j=0; j<dispos[i].length; j++)
+					{
+						dispos[i][j] = j;
+					}
+				}
 			}
 		}
 		
