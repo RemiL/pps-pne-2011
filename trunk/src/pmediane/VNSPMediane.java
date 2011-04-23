@@ -103,7 +103,7 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 */
 	protected void majConditionArret(boolean init)
 	{
-		if (init || valObjSauvegardee < meilleureValObj)
+		if (init || meilleureValObj < valObjSauvegardee)
 			nbIterationsSansAmelioration = 0;
 		else
 			nbIterationsSansAmelioration++;

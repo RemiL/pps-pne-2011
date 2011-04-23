@@ -90,6 +90,7 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 				if (f.estAmelioration(valObj, meilleureValObj))
 				{
 					meilleureSolution = sol;
+					meilleureValObj = valObj;
 					k = 1;
 				}
 				else 
