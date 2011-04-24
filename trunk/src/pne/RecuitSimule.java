@@ -83,10 +83,12 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 		else
 			temp = tempInitiale;
 		
+		// Initialisation de la condition d'arrêt
 		majConditionArret(true);
 		
 		do
 		{
+			// Initialisation de la condition de changement de palier
 			majConditionChangementPalier(true);
 			
 			do
@@ -179,6 +181,7 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 	 */
 	private boolean verifierAcceptationDegradation(int delta)
 	{
+		// Si on a une maximisation, il faut considérer -delta
 		if (f.estMaximisation())
 			delta = - delta;
 		
@@ -199,6 +202,7 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 		int nbDegradations, nbDegradationsAcceptees;
 		double tauxAcceptation;
 		
+		// On part d'une température initiale égale à 1000
 		temp = 1000;
 		
 		do
@@ -221,12 +225,14 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 				}
 				else 
 				{
+					// On compte le nombre de dégradations
 					nbDegradations++;
 					
 					// s'il y a dégradation alors on utilise le critere de metropolis pour voir
 					// si on accepte la solution quand même
 					if (verifierAcceptationDegradation(valObj - valObjPrec))
 					{
+						// On compte le nombre de dégradations acceptées à cette température
 						nbDegradationsAcceptees++;
 						
 						sol = solVoisine;
@@ -237,15 +243,18 @@ public abstract class RecuitSimule<Data, Solution> implements Heuristique<Data, 
 				majConditionChangementPalier(false);
 			} while (!estAtteinteConditionChangementPalier());
 			
+			// On calcule le taux d'acceptation des dégradations
 			tauxAcceptation = (double)nbDegradationsAcceptees / nbDegradations;
 			
+			// S'il est insuffisant, on double la température
 			if (tauxAcceptation < 0.80)
 				temp *= 2;
+			// S'il est trop élevé, on réduit la température d'un quart
 			else if (tauxAcceptation > 0.85)
-				temp -= 2;
+				temp *= 0.75;
 		} while (tauxAcceptation < 0.80 || tauxAcceptation > 0.85);
 		
-		System.out.println("T init = "+temp+" - "+tauxAcceptation*100+"%");
+		//System.out.print(temp+";"+tauxAcceptation*100+"%;");
 		
 		return temp;
 	}

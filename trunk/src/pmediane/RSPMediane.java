@@ -61,13 +61,13 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 	 * savoir :
 	 *  - un ajustement automatique de la température
 	 *  - une température d'arrêt de 0.001
-	 *  - un nombre d'itérations par paliers égal au carré du nombre
+	 *  - un nombre d'itérations par paliers égal au nombre
 	 *    d'entités dans le problème traité
-	 *  - un taux de décroissance de la température de 0.90
+	 *  - un taux de décroissance de la température de 0.93
 	 *  - un voisinage obtenu par fermeture d'un des centres et
 	 *    promotion d'une des entités en un centre
-	 *  - une heuristique gloutonne pour la construction de la solution
-	 *    initiale.
+	 *  - une heuristique gloutonne pour la construction de la
+	 *    solution initiale.
 	 */
 	public RSPMediane()
 	{
@@ -75,7 +75,7 @@ public class RSPMediane extends RecuitSimule<DataPMediane, SolutionPMediane>
 
 		this.tempArret = 0.001;
 		this.nbIterationsMaxPalier = NB_PALIERS_AUTO;
-		this.tauxDecroissanceTemp = 0.90;
+		this.tauxDecroissanceTemp = 0.93;
 	}
 	
 	/**

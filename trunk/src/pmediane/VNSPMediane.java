@@ -56,7 +56,7 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	 * traiter le problème de la p-médiane.
 	 * Les paramètres utilisés pour le VNS sont ceux par défaut,
 	 *  à savoir :
-	 *  - une condition d'arrêt fixée à 25 itérations sans amélioration
+	 *  - une condition d'arrêt fixée à 5000 itérations sans amélioration
 	 *    de la valeur de la fonction objectif.
 	 *  - une structure de voisinages obtenue grâce à un voisinage à taille
 	 *    variable basé sur la fermeture de k des centres et la promotion 
@@ -67,18 +67,16 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 	public VNSPMediane()
 	{
 		super(new FonctionObjectifPMediane(), new HeuristiqueGloutonnePMediane());
-		this.nbMaxIterationsSansAmelioration = 250;
+		this.nbMaxIterationsSansAmelioration = 5000;
 		this.voisinage = new VoisinagePMediane();
 	}
 
 	/**
-	 * Initialise kMax à au nombre de centres à ouvrir
-	 * puisqu'on peut au maximum procéder aux changements
-	 * de tous les centres.
+	 * Initialise kMax.
 	 */
 	protected void initialiserKMax()
 	{
-		kMax = donnees.getNbCentres();
+		kMax = 2;
 	}
 	
 	/**
@@ -125,15 +123,16 @@ public class VNSPMediane extends VNS<DataPMediane, SolutionPMediane>
 
 	/**
 	 * Retourne la meilleure solution locale trouvée à partir
-	 * de la solution fournie. Dans notre implémentation cela
-	 * correspond à une recherche exhaustive dans le voisinage
-	 * de taille 1 de la solution fournie.
+	 * de la solution fournie. Dans notre implémentation on ne
+	 * fait pas de recherche locale.
 	 * 
 	 * @return une meilleure solution locale trouvée pour la
-	 * 		   solution fournie.
+	 * 		   solution fournie, ici celle de départ puisqu'on
+	 * 		   ne fait pas la recherche.
 	 */
 	protected SolutionPMediane rechercheLocale(SolutionPMediane s)
 	{
-		return voisinage.rechercherMeilleureSolution(s, 1, f);
+		return s;
+		//return voisinage.rechercherSolutionLocale(s, donnees.getNbCentres(), f);
 	}
 }

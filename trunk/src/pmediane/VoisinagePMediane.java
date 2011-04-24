@@ -20,17 +20,26 @@ import pne.VoisinageTailleVariable;
  */
 public class VoisinagePMediane implements Voisinage<SolutionPMediane>, VoisinageTailleVariable<SolutionPMediane>
 {
+	/** Générateur de nombres aléatoires. */
 	private static Random rand = new Random();
-	
+	/** Les données correspondant à la solution
+	 *  courante. */
 	private DataPMediane donnees;
+	/** Indices de boucles */
 	private int i, j, c, a;
+	/** Ancien et nouveau centre pour les échanges. */
 	private int ancienCentre, nouveauCentre;
-	private int[] centres;
-	private int[] affectations;
-	private int[] affectationsSecondaires;
+	/** Tableaux représentant la solution en cours de génération. */
+	private int[] centres, affectations, affectationsSecondaires;
+	/** Une solution temporaire. */
 	private SolutionPMediane sol;
-	private int[][] dispos;
+	/** Tableau permettant d'éviter de réessayer
+	 *  les même solutions. */
 	private int[] nbDispos;
+	/** Tableau permettant d'éviter de réessayer
+	 *  les même solutions. */
+	private int[][] dispos;
+	/** Valeurs de la fonction objectif. */
 	int valObj, meilleureValObj;
 	
 	/**
@@ -43,17 +52,22 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	 */
 	public SolutionPMediane genererSolution(SolutionPMediane s)
 	{
+		// On part de la solution fournie.
 		donnees = s.getDonnees();
 		centres = s.getCentres();
 		affectations = s.getAffectations();
 		affectationsSecondaires = s.getAffectationsSecondaires();
 		
+		// On dire un centre à fermer au hasard
 		c = rand.nextInt(centres.length);
 		ancienCentre = centres[c];
+		// On ouvre un nouveau centre (ne doit pas être un
+		// centre déjà ouvert).
 		do
 			nouveauCentre = rand.nextInt(affectations.length);
 		while (affectations[nouveauCentre] == nouveauCentre);
 		
+		// On réaffecte les entités.
 		for (i=0; i<affectations.length; i++)
 		{
 			// Le centre de l'entité a été fermé
@@ -64,7 +78,7 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 				if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
 					affectations[i] = nouveauCentre;
 				else // Sinon on doit retrouver le nouveau deuxième meilleur centre
-				{
+				{// car l'ancien devient le meilleur centre.
 					affectations[i] = affectationsSecondaires[i];
 					
 					affectationsSecondaires[i] = nouveauCentre;
@@ -119,19 +133,25 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	 */
 	public SolutionPMediane genererSolution(SolutionPMediane s, int k)
 	{
+		// On part de la solution fournie.
 		donnees = s.getDonnees();
 		centres = s.getCentres();
 		affectations = s.getAffectations();
 		affectationsSecondaires = s.getAffectationsSecondaires();
 		
+		// On doit fermer k centres parmi les p ouverts actuellement.
 		for (int k2=0; k2<k; k2++)
 		{
+			// On tire un centre pour le fermer en se débrouillant
+			// pour ne pas fermer un centre qui vient d'être ouvert.
 			c = rand.nextInt(centres.length - k2);
 			ancienCentre = centres[c];
+			// On le remplace par une entité non actuellement centre.
 			do
 				nouveauCentre = rand.nextInt(affectations.length);
 			while (affectations[nouveauCentre] == nouveauCentre);
 			
+			// On réaffecte les entités.
 			for (i=0; i<affectations.length; i++)
 			{
 				// Le centre de l'entité a été fermé
@@ -142,7 +162,7 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 					if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
 						affectations[i] = nouveauCentre;
 					else // Sinon on doit retrouver le nouveau deuxième meilleur centre
-					{
+					{ // car l'ancien devient le nouveau meilleur centre.
 						affectations[i] = affectationsSecondaires[i];
 						
 						affectationsSecondaires[i] = nouveauCentre;
@@ -182,6 +202,7 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 			}
 			
 			centres[c] = centres[centres.length - k2 - 1];
+			// Evite de refermer le centre tout juste ouvert.
 			centres[centres.length - k2 - 1] = nouveauCentre;
 		}
 		
@@ -189,33 +210,24 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 	}
 
 	/**
-	 * Trouve la meilleure solution locale disponible dans le
-	 * voisinage de la solution initiale fournie en effectuant
-	 * une recherche exhaustive.
+	 * Retourne la meilleure solution trouvée après une
+	 * recherche locale. La recherche est effectuée en
+	 * faisant une descente avec au maximum le nombre
+	 * d'essais fournis. Elle utilise le voisinage de 
+	 * taille 1.
+	 * La solution retournée est la meilleure par rapport
+	 * à la fonction objectif fournie.
 	 * 
-	 * @param s la solution initiale.
-	 * @return la meilleure solution située dans le
-	 * 		   voisinage de la solution de base.
+	 * @param s la solution de base.
+	 * @param essais la nombre d'essai à effectuer.
+	 * @param f la fonction objectif.
+	 * @return la meilleure solution locale trouvée
+	 * 		   après la descente.
 	 */
-	public SolutionPMediane rechercherMeilleureSolution(SolutionPMediane s, FonctionObjectif<SolutionPMediane> f)
+	public SolutionPMediane rechercherSolutionLocale(SolutionPMediane s, int essais, FonctionObjectif<SolutionPMediane> f)
 	{
-		/*SolutionPMediane sol;
-		int valObj, meilleureValObj = f.calculer(s);
-		
-		for (int i=0; i<s.getDonnees().getNbEntites(); i++)
-		{
-			sol = genererSolution(s);
-			valObj = f.calculer(sol);
-			
-			if (f.estAmelioration(valObj, meilleureValObj))
-			{
-				s = sol;
-				meilleureValObj = valObj;
-			}
-		}
-		
-		return s;*/
-
+		// Tableaux permettant d'éviter de réessayer les même solutions
+		// plusieurs fois en gardant une trace des essais précédents.
 		dispos = new int[donnees.getNbCentres()][donnees.getNbEntites()];
 		nbDispos = new int[donnees.getNbCentres()];
 		for (i=0; i<nbDispos.length; i++)
@@ -229,19 +241,26 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 		}
 		
 		donnees = s.getDonnees();
+		// Pour l'instant la meilleure solution
+		// est celle de départ.
 		meilleureValObj = f.calculer(s);
 		
-		for (int n=0; n<donnees.getNbCentres(); n++)
+		// On fait le nombre d'essais demandés.
+		for (int n=0; n<essais; n++)
 		{
+			// On repart de la solution actuellement meilleure
 			centres = s.getCentres();
 			affectations = s.getAffectations();
 			affectationsSecondaires = s.getAffectationsSecondaires();
 			
+			// On ferme un centre pour lequel on n'a pas déja
+			// testé toutes les possibilités de centres entrants.
 			c = rand.nextInt(centres.length);
 			while (nbDispos[c] <= 0)
 				c = (c+1) % centres.length;
 			ancienCentre = centres[c];
 			
+			// On trouve un centre entrant non encore déja essayé.
 			do
 			{
 				a = rand.nextInt(nbDispos[c]);
@@ -255,6 +274,7 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 			dispos[c][a] = dispos[c][nbDispos[c]-1];
 			nbDispos[c]--;
 			
+			// On réaffecte les entités
 			for (i=0; i<affectations.length; i++)
 			{
 				// Le centre de l'entité a été fermé
@@ -265,7 +285,7 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 					if (donnees.getDistance(i, nouveauCentre) < donnees.getDistance(i, affectationsSecondaires[i]))
 						affectations[i] = nouveauCentre;
 					else // Sinon on doit retrouver le nouveau deuxième meilleur centre
-					{
+					{ // puisque l'ancien devient le nouveau meilleure centre.
 						affectations[i] = affectationsSecondaires[i];
 						
 						affectationsSecondaires[i] = nouveauCentre;
@@ -309,6 +329,8 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 			sol = new SolutionPMediane(donnees, centres, affectations, affectationsSecondaires);
 			valObj = f.calculer(sol);
 			
+			// Si la solution générée est meilleure que l'ancienne,
+			// on repart d'elle.
 			if (f.estAmelioration(valObj, meilleureValObj))
 			{
 				s = sol;
@@ -327,20 +349,5 @@ public class VoisinagePMediane implements Voisinage<SolutionPMediane>, Voisinage
 		}
 		
 		return s;
-	}
-	
-	/**
-	 * Trouve la meilleure solution locale disponible dans le
-	 * voisinage de taille k de la solution initiale fournie en
-	 * effectuant une recherche exhaustive.
-	 * 
-	 * @param s la solution initiale.
-	 * @param k la taille du voisinage à considérer.
-	 * @return la meilleure solution située dans le voisinage
-	 * 		   de taille k de la solution de base.
-	 */
-	public SolutionPMediane rechercherMeilleureSolution(SolutionPMediane s,	int k, FonctionObjectif<SolutionPMediane> f)
-	{
-		return rechercherMeilleureSolution(s, f);
 	}
 }
