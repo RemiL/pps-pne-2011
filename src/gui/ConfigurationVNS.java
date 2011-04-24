@@ -20,7 +20,7 @@ public class ConfigurationVNS extends Configuration{
 
 	private Button ok = new Button("OK");
 	
-	 private JTextField iterInitDef = new JTextField("250");
+	 private JTextField iterInitDef = new JTextField("5000");
      private JLabel iterInit = new JLabel("Nombre maximum d'itérations sans amélioration");
     
      private JPanel pan = new JPanel();
