@@ -4,16 +4,12 @@ package gui;
 
 import ilog.concert.IloException;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Timer;
 
 
@@ -250,14 +246,9 @@ import pmediane.VoisinagePMediane;
 			this.menu3.add(item8);
 			item8.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
-					Runtime runtime = Runtime.getRuntime();
-					try
-					{
-					runtime.exec(new String[]{
-					"C:\\Program Files\\Adobe\\Acrobat 7.0\\Reader\\AcroRd32.exe",
-					"data\\Manuel.pdf"} );
-					}
-					catch(Exception e) {
+					try	{
+						java.awt.Desktop.getDesktop().open(new File("P_Médiane_Manuel_utilisateur_Duisit_Lacroix_Nivet.pdf"));
+					} catch(Exception e) {
 						e.printStackTrace();
 					}
 				}				
