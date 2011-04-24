@@ -10,7 +10,7 @@ public class Configuration extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ArrayList<Integer> configuration(){
+	public ArrayList<Double> configuration(){
 		return null;
 	}
 }
