@@ -190,6 +190,26 @@ import pmediane.VoisinagePMediane;
 					log("");
 					
 					labelValFoncObj.setText("Valeur de la fonction objectif : "+f.calculer(sol));
+					
+					DefaultTableModel tm = (DefaultTableModel) tableauCentres.getModel();
+					tm.setColumnCount(0);
+					Integer[] vals = new Integer[1];
+					for (int i=0; i<donnees.getNbCentres(); i++)
+					{
+						vals[0] = sol.getCentres()[i]+1;
+							
+						tm.addColumn("Centre "+(i+1), vals);
+					}
+					
+					tm = (DefaultTableModel) tableauAffectations.getModel();
+					tm.setColumnCount(0);
+					vals = new Integer[1];
+					for (Integer i=0; i<donnees.getNbEntites(); i++)
+					{
+						vals[0] = sol.getCentre(i)+1;
+							
+						tm.addColumn(i+1, vals);
+					}
 				}				
 			});
 			this.menu1.addSeparator();
@@ -307,7 +327,9 @@ import pmediane.VoisinagePMediane;
 			tableauAdjacences = new JTable(new DefaultTableModel());
 			tableauAdjacences.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			tableauCentres = new JTable(new DefaultTableModel());
+			tableauCentres.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			tableauAffectations = new JTable(new DefaultTableModel());
+			tableauAffectations.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			
 			JPanel textuelle = new JPanel();
 			textuelle.setLayout(new BoxLayout(textuelle, BoxLayout.Y_AXIS));
