@@ -20,20 +20,21 @@ import pne.Heuristique;
  */
 public class CPLEXPMediane implements Heuristique<PLNEPMediane, SolutionPMediane>
 {
+	/** Le modèle et moteur CPLEX */
 	private IloCplex modele;
+	/** Les variables du programme linéaire. */
 	private IloIntVar[] variables; 
 	
 	/**
 	 * Crée un solveur pour le PLNE de la p-médiane
 	 * basé sur CPLEX.
+	 * 
+	 * @throws IloException si la création du moteur
+	 * 		   CPLEX échoue.
 	 */
-	public CPLEXPMediane()
+	public CPLEXPMediane() throws IloException
 	{
-		try {
-			modele = new IloCplex();
-		} catch (IloException e) {
-			e.printStackTrace();
-		}
+		modele = new IloCplex();
 	}
 	
 	/**
@@ -85,7 +86,7 @@ public class CPLEXPMediane implements Heuristique<PLNEPMediane, SolutionPMediane
 				num++;
 			}
 			
-			if (modele.solve())
+			if (modele.solve()) // Si la résolution est un succès.
 			{
 				int c = 0;
 				int centres[] = new int[donnees.getDonnees().getNbCentres()];
@@ -93,11 +94,14 @@ public class CPLEXPMediane implements Heuristique<PLNEPMediane, SolutionPMediane
 				int affectationsSecondaires[] = new int[donnees.getDonnees().getNbEntites()];
 				double[] val = modele.getValues(variables);
 				
+				// On convertit la solution donnée par CPLEX en SolutionPMediane.
 				for (int i=0; i<donnees.getDonnees().getNbEntites(); i++)
 				{
 					for (int j=0; j<donnees.getDonnees().getNbEntites(); j++)
 					{
-						if (val[i*donnees.getDonnees().getNbEntites() + j] == 1.0)
+						// Pour palier au problème d'arrondi, on vérifie juste que
+						// la variable soit supérieure à 0,99.
+						if (val[i*donnees.getDonnees().getNbEntites() + j] > 0.99)
 						{
 							affectations[i] = j;
 							
@@ -110,7 +114,9 @@ public class CPLEXPMediane implements Heuristique<PLNEPMediane, SolutionPMediane
 				s = new SolutionPMediane(donnees.getDonnees(), centres, affectations, affectationsSecondaires);
 			}
 		} catch (IloException e) {
+			// Ne devrait pas arriver.
 			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		return s;

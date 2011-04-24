@@ -69,6 +69,7 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 		meilleureSolution = heuristiqueSolInitiale.calculerSolution(donnees);
 		meilleureValObj = f.calculer(meilleureSolution);
 		
+		// Initialisation de la condition d'arrêt
 		majConditionArret(true);
 		
 		do
@@ -86,14 +87,16 @@ public abstract class VNS<Data, Solution> implements Heuristique<Data, Solution>
 				
 				valObj = f.calculer(sol);
 				
-				// mouvement
+				// On effectue un mouvement vers cette solution si
+				// elle améliore la valeur de la fonction objectif.
 				if (f.estAmelioration(valObj, meilleureValObj))
 				{
 					meilleureSolution = sol;
 					meilleureValObj = valObj;
+					// On repart du premier voisinage.
 					k = 1;
 				}
-				else 
+				else // On passe au voisinage plus grand.
 					k++;
 			}
 			

@@ -26,6 +26,7 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 	 */
 	public SolutionPMediane calculerSolution(DataPMediane donnees)
 	{
+		// Générateur de nombres aléatoires.
 		Random rand = new Random();
 		int i, j;
 		
@@ -37,6 +38,7 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 		for (i=0; i<alea.length; i++)
 			alea[i] = i;
 		
+		// On tire le nombre attendu de centres sans répétion.
 		for (i=0; i<centres.length; i++)
 		{
 			j = rand.nextInt(alea.length - i);
@@ -44,6 +46,7 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 			alea[j] = alea[alea.length - i - 1];
 		}
 		
+		// On affectue les entités à leur centre le plus proche.
 		for (i=0; i<affectations.length; i++)
 		{
 			affectations[i] = centres[0];
@@ -51,11 +54,14 @@ public class GenerateurSolutionAleatoirePMediane implements Heuristique<DataPMed
 			
 			for (j=1; j<centres.length; j++)
 			{
+				// Si le centre est plus proche que l'actuel meilleur, il le remplace
+				// et l'ancien devient le deuxième meilleur centre.
 				if (donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectations[i]))
 				{
 					affectationsSecondaires[i] = affectations[i];
 					affectations[i] = centres[j];
 				}
+				// Sinon il peut être le deuxième meilleur centre.
 				else if (affectationsSecondaires[i] == -1
 						 || donnees.getDistance(i, centres[j]) < donnees.getDistance(i, affectationsSecondaires[i]))
 					affectationsSecondaires[i] = centres[j];

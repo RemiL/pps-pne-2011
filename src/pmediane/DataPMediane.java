@@ -19,6 +19,8 @@ public class DataPMediane
 	private final int nbEntites;
 	/** Le nombre de centres à ouvrir. */
 	private final int nbCentres;
+	/** Le nombre de liens dans le graphe originel. */
+	private final int nbLiens;
 	/** Le tableau des distances. */
 	private int[][] distances;
 	
@@ -38,19 +40,15 @@ public class DataPMediane
 	 * - distance entre les deux entités.
 	 * 
 	 * @param nomFichier le nom du fichier à charger.
+	 * @throws FileNotFoundException si le fichier n'existe pas.
 	 */
-	public DataPMediane(String nomFichier)
+	public DataPMediane(String nomFichier) throws FileNotFoundException
 	{
 		int i, j;
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(new File(nomFichier));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
+		Scanner scanner = new Scanner(new File(nomFichier));
+
 		nbEntites = scanner.nextInt();
-		scanner.nextInt(); // nombre de liens, non utilisé
+		nbLiens = scanner.nextInt();
 		nbCentres = scanner.nextInt();
 		
 		distances = new int[nbEntites][nbEntites];
@@ -97,13 +95,15 @@ public class DataPMediane
 	}
 	
 	/**
-	 * Retourne le nombre de liens dans le graphe.
+	 * Retourne le nombre de liens dans le graphe d'origine
+	 * avant que la matrice soit complétée par les plus courts
+	 * chemins.
 	 * 
-	 * @return le nombre de liens dans le graphe.
+	 * @return le nombre de liens dans le graphe d'origine.
 	 */
 	public int getNbLiens()
 	{
-		return 0;
+		return nbLiens;
 	}
 	
 	/**

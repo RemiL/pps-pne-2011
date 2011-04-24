@@ -1,5 +1,8 @@
 package pmediane;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * Classe représentant une solution à un problème de la
  * p-médiane.
@@ -113,5 +116,30 @@ public class SolutionPMediane
 	public DataPMediane getDonnees()
 	{
 		return donnees;
+	}
+	
+	/**
+	 * Exporte la solution dans un fichier :
+	 * - la première comporte la liste des centres ouverts
+	 *   séparés par un espace
+	 * - la deuxième ligne (séparée de la première par deux
+	 *   retour à la ligne) comporte la liste des affectations
+	 *   des centres aux entités séparées par des espaces.
+	 * 
+	 * @param nomFichier le nom du fichier à créer.
+	 * @throws IOException si l'écriture échoue.
+	 */
+	public void exporter(String nomFichier) throws IOException
+	{
+		FileWriter f = new FileWriter(nomFichier);
+		
+		for (int i=0; i<centres.length; i++)
+			f.write(Integer.toString(centres[i]+1)+" ");
+		f.write("\n\n");
+		
+		for (int i=0; i<affectations.length; i++)
+			f.write(Integer.toString(affectations[i]+1)+" ");
+		
+		f.close();
 	}
 }

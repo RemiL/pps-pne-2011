@@ -44,7 +44,7 @@ public abstract class PLNE
 	/** L'objectif à atteindre, à savoir minimiser ou
 	 *  maximiser la valeur de la fonction objectif. */
 	protected TypeObjectif typeObjectif;
-	/** La matrice des contraintes. */
+	/** La tables des contraintes. */
 	protected HashMap<Integer, Integer>[] contraintes;
 	/** Les seconds membres des contraintes */
 	protected int[] secondsMembresContraintes;
@@ -105,9 +105,12 @@ public abstract class PLNE
 	}
 	
 	/**
-	 * Retourne la matrice des coefficients des contraintes.
+	 * Retourne la table des contraintes. Chaque élément de
+	 * du tableau est une table de hachage qui permet d'associer
+	 * une variable à son coefficient dans la contrainte s'il
+	 * est différent de zéro.
 	 * 
-	 * @return la matrice des coefficients des contraintes.
+	 * @return la table des contraintes.
 	 */
 	public HashMap<Integer, Integer>[] getContraintes()
 	{

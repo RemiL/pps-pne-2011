@@ -26,6 +26,7 @@ public class PLNEPMediane extends PLNE
 	@SuppressWarnings("unchecked")
 	public PLNEPMediane(DataPMediane donnees)
 	{
+		// On alloue la mémoire nécessaire.
 		this.donnees = donnees;
 		nbVariables = donnees.getNbEntites()*donnees.getNbEntites();
 		nomsVariables = new String[nbVariables];
