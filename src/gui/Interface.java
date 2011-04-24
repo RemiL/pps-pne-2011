@@ -2,27 +2,37 @@ package gui;
 
 
 
+import ilog.concert.IloException;
+
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Timer;
 
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import pmediane.CPLEXPMediane;
 import pmediane.DataPMediane;
@@ -57,8 +67,12 @@ import pmediane.VoisinagePMediane;
 		private ButtonGroup bg = new ButtonGroup();
 		private ArrayList<Integer> info;
 		
-		private JTable tableauTextuel;
+		private JTable tableauAdjacences;
+		private JTable tableauCentres;
+		private JTable tableauAffectations;
+		
 		private DataPMediane donnees;
+		private CPLEXPMediane sol;
 
 		private VoisinagePMediane voisinage;
 		private HeuristiqueGloutonnePMediane solution;
@@ -85,20 +99,31 @@ import pmediane.VoisinagePMediane;
 					//Charger une instance
 					JFileChooser instance = new JFileChooser();
 					instance.showOpenDialog(null);
-					donnees = new DataPMediane(instance.getSelectedFile().getAbsolutePath());
+					try {
+						donnees = new DataPMediane(instance.getSelectedFile().getAbsolutePath());
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
 					
 					
 					//pour l'onglet 1
-					Integer[][] donneesTextuelles = new Integer[donnees.getNbEntites()][donnees.getNbEntites()];
-					String[] entetesTextuelles = new String[donnees.getNbEntites()];
-					for(Integer j = 0; j<donnees.getNbEntites(); j++){
-						entetesTextuelles[j] = j.toString();
-						for(Integer i = 0; i<donnees.getNbEntites(); i++){
-							donneesTextuelles[i][j] = donnees.getDistance(i, j);
-							System.out.println(donnees.getDistance(i, j));
-						}
+					DefaultTableModel tm = (DefaultTableModel) tableauAdjacences.getModel();
+					tm.setColumnCount(0);
+					
+					Integer[] vals = new Integer[donnees.getNbEntites()];
+					for (int i=0; i<donnees.getNbEntites(); i++)
+						vals[i] = i+1;
+					tm.addColumn("Entités", vals);
+					
+					for (Integer j=0; j<donnees.getNbEntites(); j++)
+					{
+						vals = new Integer[donnees.getNbEntites()];
+						
+						for (int i=0; i<donnees.getNbEntites(); i++)
+							vals[i] = donnees.getDistance(i, j);
+						
+						tm.addColumn(j+1, vals);
 					}
-			        tableauTextuel = new JTable(donneesTextuelles, entetesTextuelles);
 				}				
 			});
 			this.menu1.add(item2);
@@ -132,7 +157,11 @@ import pmediane.VoisinagePMediane;
 						
 					}
 					else{
-						CPLEXPMediane sol = new CPLEXPMediane();
+						try {
+							sol = new CPLEXPMediane();
+						} catch (IloException e) {
+							e.printStackTrace();
+						}
 						methode = new JTextField("Début du calcul : \n Méthode : CPLEX");
 						params = new ArrayList<JTextField>();
 						params.add(new JTextField("Nombre maximum d'itérations sans amélioration : " + info.get(0).toString()));
@@ -255,15 +284,23 @@ import pmediane.VoisinagePMediane;
 			JPanel graphique = new JPanel();
 			
 			//pour l'onglet 1 ==> Données textuelles
-			Integer[][] donneesTextuelles = {};
-			String[] entetesTextuelles = {};
-	        tableauTextuel = new JTable(donneesTextuelles, entetesTextuelles);
+			tableauAdjacences = new JTable(new DefaultTableModel());
+			tableauAdjacences.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			tableauCentres = new JTable(new DefaultTableModel());
+			tableauAffectations = new JTable(new DefaultTableModel());
 			
-	        JPanel textuelle = new JPanel();
-			
-			textuelle.add (tableauTextuel);
-			textuelle.add(tableauTextuel.getTableHeader(), BorderLayout.NORTH);
-			textuelle.add(tableauTextuel, BorderLayout.CENTER);
+			JPanel textuelle = new JPanel();
+			textuelle.setLayout(new BoxLayout(textuelle, BoxLayout.Y_AXIS));
+			textuelle.add(new JLabel("Matrice d'adjacence :"));
+			textuelle.add(new JScrollPane(tableauAdjacences));
+			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
+			textuelle.add(new JLabel("Valeur de la fonction objectif : ?"));
+			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
+			textuelle.add(new JLabel("Centres ouverts :"));
+			textuelle.add(new JScrollPane(tableauCentres));
+			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
+			textuelle.add(new JLabel("Affectations :"));
+			textuelle.add(new JScrollPane(tableauAffectations));
 			
 			//Pour l'onglet 2 ==> Journal
 			journal = new JPanel();
