@@ -13,46 +13,50 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ConfigurationRS extends Configuration{
-	/**
-	 * 
-	 */
+public class ConfigurationRS extends Configuration
+{
 	private static final long serialVersionUID = 1L;
 
 	private Button ok = new Button("OK");
 
-	 private JTextField tempInitDef = new JTextField("1000.0");
-     private JLabel tempInit = new JLabel("Température initiale");
-     private JTextField tempArretDef = new JTextField("0.001");
-     private JLabel tempArret = new JLabel("Température d'arrêt");
-     private JTextField nbItDef = new JTextField("-1");
-     private JLabel nbIt = new JLabel("Nombre  d'itérations / paliers");
-     private JTextField tauxDecroissanceDef = new JTextField("0.90");
-     private JLabel tauxDecroissance = new JLabel("Taux de décroissance");
-     private JCheckBox tempCase = new JCheckBox("Auto");
-     private JCheckBox itCase = new JCheckBox("Auto");
-     private JPanel pan = new JPanel();
-
-     private Double auto = 1.0;
-     private Double autoIt = 1.0;
-	public ConfigurationRS(){
+	private JTextField tempInitDef = new JTextField("1000.0");
+	private JLabel tempInit = new JLabel("Température initiale");
+	private JTextField tempArretDef = new JTextField("0.001");
+	private JLabel tempArret = new JLabel("Température d'arrêt");
+	private JTextField nbItDef = new JTextField("-1");
+	private JLabel nbIt = new JLabel("Nombre  d'itérations / paliers");
+	private JTextField tauxDecroissanceDef = new JTextField("0.93");
+	private JLabel tauxDecroissance = new JLabel("Taux de décroissance");
+	private JCheckBox tempCase = new JCheckBox("Auto");
+	private JCheckBox itCase = new JCheckBox("Auto");
+	private JPanel pan = new JPanel();
+	
+	private Double auto = 1.0;
+	private Double autoIt = 1.0;
+	
+	public ConfigurationRS()
+	{
+        //Initialisation de la configuration au Recuit simulé 
+        info = new ArrayList<Double>();
+        info.add(1000.);
+        info.add(0.001);
+        info.add(-1.0);
+        info.add(0.93);
+        info.add(1.0);
+        info.add(1.0);
 	}
 	
-	public ArrayList<Double> configuration(){
+	public ArrayList<Double> configuration()
+	{
 		this.setTitle("Configuration du Recuit Simulé");
 		this.setSize(400, 200);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
+		auto = autoIt = 1.0;
 		
-	    
-	// pan.setBackground(Color.white);
-	 //   pan.setLayout(new BorderLayout());
-	           
-	    
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		pan = new JPanel();
 		
-	    
 	    Font police = new Font("Arial", Font.BOLD, 14);
 	    tempInitDef.setFont(police);
 	    tempInitDef.setPreferredSize(new Dimension(150, 30));
@@ -71,13 +75,15 @@ public class ConfigurationRS extends Configuration{
 	    pan.getComponent(1).setEnabled(false);
 	    ActionListener grisee = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	if(tempCase.isSelected()){
-	        		auto = 0.0;
+	        	if (tempCase.isSelected())
+	        	{
+	        		auto = 1.0;
 	        		pan.getComponent(1).setEnabled(false);
 	        	}
-	            else{
+	            else
+	            {
 	            	pan.getComponent(1).setEnabled(true);
-	            	auto = 1.0;
+	            	auto = 0.0;
 	            }
 	        }
 	    }; 
@@ -92,13 +98,15 @@ public class ConfigurationRS extends Configuration{
 	    pan.getComponent(6).setEnabled(false);
 	    ActionListener griseeIt = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	if(itCase.isSelected()){
-	        		autoIt = 0.0;
+	        	if (itCase.isSelected())
+	        	{
+	        		autoIt = 1.0;
 	        		pan.getComponent(6).setEnabled(false);
 	        	}
-	            else{
+	            else
+	            {
 	            	pan.getComponent(6).setEnabled(true);
-	            	autoIt = 1.0;
+	            	autoIt = 0.0;
 	            }
 	        }
 	    };
@@ -108,10 +116,16 @@ public class ConfigurationRS extends Configuration{
 	    pan.add(tauxDecroissance);
 	    pan.add(tauxDecroissanceDef);
 	    pan.add(ok);
-	  // pan.add(top, BorderLayout.NORTH);
 	   
 	    ActionListener valider = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
+	    		info = new ArrayList<Double> ();
+	    		info.add(Double.parseDouble(tempInitDef.getText()));
+	    		info.add(Double.parseDouble(tempArretDef.getText()));
+	    		info.add(Double.parseDouble(nbItDef.getText()));
+	    		info.add(Double.parseDouble(tauxDecroissanceDef.getText()));
+	    		info.add(auto);
+	    		info.add(autoIt);
 	        	dispose();
 	        }
 	    };
@@ -119,13 +133,7 @@ public class ConfigurationRS extends Configuration{
 	    this.setContentPane(pan);
 	
 		this.setVisible(true);
-		ArrayList<Double> list = new ArrayList<Double> ();
-		list.add(Double.parseDouble(tempInitDef.getText()));
-		list.add(Double.parseDouble(tempArretDef.getText()));
-		list.add(Double.parseDouble(nbItDef.getText()));
-		list.add(Double.parseDouble(tauxDecroissanceDef.getText()));
-		list.add(auto);
-		list.add(autoIt);
-		return list;
+
+		return info;
 	}
 }

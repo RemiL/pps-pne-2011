@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-public class Configuration extends JFrame{
-	/**
-	 * 
-	 */
+public class Configuration extends JFrame
+{
 	private static final long serialVersionUID = 1L;
-
-	public ArrayList<Double> configuration(){
+	protected ArrayList<Double> info;
+	
+	public ArrayList<Double> configuration()
+	{
 		return null;
+	}
+	
+	public ArrayList<Double> getInfo()
+	{
+		return info;
 	}
 }
