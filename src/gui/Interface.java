@@ -121,8 +121,10 @@ import pmediane.VoisinagePMediane;
 						
 						tm.addColumn(j+1, vals);
 					}
+					item2.setEnabled(true);
 				}				
 			});
+			item2.setEnabled(false);
 			this.menu1.add(item2);
 			
 			//Lancer la résolution
@@ -204,6 +206,13 @@ import pmediane.VoisinagePMediane;
 			this.menu2.add(item4);
 			item4.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
+					info = new ArrayList<Double>();
+			        info.add(1000.);
+			        info.add(0.001);
+			        info.add(-1.0);
+			        info.add(0.90);
+			        
+
 					config = new ConfigurationRS();
 					item7.setEnabled(true);
 				}				
@@ -212,6 +221,9 @@ import pmediane.VoisinagePMediane;
 			this.menu2.add(item5);
 			item5.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
+					info = new ArrayList<Double>();
+			        info.add(250.0);
+					
 					config = new ConfigurationVNS();
 					item7.setEnabled(true);
 				}				
