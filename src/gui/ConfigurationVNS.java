@@ -20,7 +20,7 @@ public class ConfigurationVNS extends Configuration{
 
 	private Button ok = new Button("OK");
 	
-	 private JTextField iterInitDef = new JTextField("0");
+	 private JTextField iterInitDef = new JTextField("250");
      private JLabel iterInit = new JLabel("Nombre maximum d'itérations sans amélioration");
     
      private JPanel pan = new JPanel();
@@ -28,7 +28,7 @@ public class ConfigurationVNS extends Configuration{
 	public ConfigurationVNS(){
 	}
 	
-	public ArrayList<Integer> configuration(){
+	public ArrayList<Double> configuration(){
 		this.setTitle("Configuration de VNS");
 		this.setSize(400, 200);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,8 +66,8 @@ public class ConfigurationVNS extends Configuration{
 	    this.setContentPane(pan);
 	
 		this.setVisible(true);
-		ArrayList<Integer> list = new ArrayList<Integer> ();
-		list.add(Integer.parseInt(iterInitDef.getText()));
+		ArrayList<Double> list = new ArrayList<Double> ();
+		list.add(Double.parseDouble(iterInitDef.getText()));
 		return list;
 	}
 }

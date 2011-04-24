@@ -21,13 +21,13 @@ public class ConfigurationRS extends Configuration{
 
 	private Button ok = new Button("OK");
 
-	 private JTextField tempInitDef = new JTextField("0");
+	 private JTextField tempInitDef = new JTextField("1000.0");
      private JLabel tempInit = new JLabel("Température initiale");
-     private JTextField tempArretDef = new JTextField("0");
+     private JTextField tempArretDef = new JTextField("0.001");
      private JLabel tempArret = new JLabel("Température d'arrêt");
-     private JTextField nbItDef = new JTextField("0");
+     private JTextField nbItDef = new JTextField("-1");
      private JLabel nbIt = new JLabel("Nombre  d'itérations / paliers");
-     private JTextField tauxDecroissanceDef = new JTextField("0");
+     private JTextField tauxDecroissanceDef = new JTextField("0.90");
      private JLabel tauxDecroissance = new JLabel("Taux de décroissance");
      private JCheckBox tempCase = new JCheckBox("Auto");
      private JPanel pan = new JPanel();
@@ -35,7 +35,7 @@ public class ConfigurationRS extends Configuration{
 	public ConfigurationRS(){
 	}
 	
-	public ArrayList<Integer> configuration(){
+	public ArrayList<Double> configuration(){
 		this.setTitle("Configuration du Recuit Simulé");
 		this.setSize(400, 200);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +64,8 @@ public class ConfigurationRS extends Configuration{
 	    pan.add(tempInit);
 	    
 	    pan.add(tempInitDef);
-	    
+	    tempCase.setSelected(true);
+	    pan.getComponent(1).setEnabled(false);
 	    ActionListener grisee = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	        	if(tempCase.isSelected())
@@ -93,11 +94,11 @@ public class ConfigurationRS extends Configuration{
 	    this.setContentPane(pan);
 	
 		this.setVisible(true);
-		ArrayList<Integer> list = new ArrayList<Integer> ();
-		list.add(Integer.parseInt(tempInitDef.getText()));
-		list.add(Integer.parseInt(tempArretDef.getText()));
-		list.add(Integer.parseInt(nbItDef.getText()));
-		list.add(Integer.parseInt(tauxDecroissanceDef.getText()));
+		ArrayList<Double> list = new ArrayList<Double> ();
+		list.add(Double.parseDouble(tempInitDef.getText()));
+		list.add(Double.parseDouble(tempArretDef.getText()));
+		list.add(Double.parseDouble(nbItDef.getText()));
+		list.add(Double.parseDouble(tauxDecroissanceDef.getText()));
 		return list;
 	}
 }
