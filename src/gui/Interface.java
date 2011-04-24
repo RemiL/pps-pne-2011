@@ -10,8 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Timer;
-
+import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -32,19 +31,19 @@ import javax.swing.table.DefaultTableModel;
 
 import pmediane.CPLEXPMediane;
 import pmediane.DataPMediane;
+import pmediane.FonctionObjectifPMediane;
 import pmediane.HeuristiqueGloutonnePMediane;
+import pmediane.PLNEPMediane;
 import pmediane.RSPMediane;
+import pmediane.SolutionPMediane;
 import pmediane.VNSPMediane;
 import pmediane.VoisinagePMediane;
 
 
-	public class Interface extends JFrame {
-
-
-		/**
-		 * 
-		 */
+	public class Interface extends JFrame
+	{
 		private static final long serialVersionUID = 1L;
+		
 		//Pour la barre du menu
 		private JMenuBar menuBar = new JMenuBar();
 		private JMenu menu1 = new JMenu("Fichier");
@@ -68,18 +67,20 @@ import pmediane.VoisinagePMediane;
 		private JTable tableauAffectations;
 		
 		private DataPMediane donnees;
-		private CPLEXPMediane sol;
-
+		private SolutionPMediane sol;
+		private FonctionObjectifPMediane f;
 		private VoisinagePMediane voisinage;
 		private HeuristiqueGloutonnePMediane solution;
 		
 		private JPanel journal;
+		private DefaultTableModel tableJournal;
 		
 		//Pour les onglets
 		private JTabbedPane onglet;
 		
-		public Interface(){
-			
+		public Interface()
+		{
+			f = new FonctionObjectifPMediane();
 			voisinage = new VoisinagePMediane();
 			solution = new HeuristiqueGloutonnePMediane();
 			
@@ -126,12 +127,15 @@ import pmediane.VoisinagePMediane;
 			
 			//Lancer la résolution
 			item2.addActionListener(new ActionListener(){
+				private Vector<String> log;
+
 				public void actionPerformed(ActionEvent arg0) {
 					JTextField methode;
 					ArrayList<JTextField> params;
 					JTextField valObj;
-					Timer timer;
-					if (item4.isSelected()){
+					
+					if (item4.isSelected())
+					{
 						RSPMediane sol = new RSPMediane(info.get(0), info.get(1),info.get(2), info.get(3), voisinage, solution);
 						methode = new JTextField("Début du calcul : \n Méthode : Recuit Simulé");
 						params = new ArrayList<JTextField>();
@@ -143,36 +147,34 @@ import pmediane.VoisinagePMediane;
 						
 						valObj = new JTextField(sol.getFonctionObjectif().toString());
 					}
-					else if (item5.isSelected()){
+					else if (item5.isSelected())
+					{
 						VNSPMediane sol = new VNSPMediane(info.get(0), voisinage, solution);
 						methode = new JTextField("Début du calcul : \n Méthode : VNS");
 						params = new ArrayList<JTextField>();
 						params.add(new JTextField("Température initiale : " + info.get(0).toString()));
 						
 						valObj = new JTextField();
-						
 					}
-					else{
+					else
+					{
+						CPLEXPMediane cplex = null;
+						
 						try {
-							sol = new CPLEXPMediane();
+							cplex = new CPLEXPMediane();
 						} catch (IloException e) {
 							e.printStackTrace();
 						}
-						methode = new JTextField("Début du calcul : \n Méthode : CPLEX");
-						params = new ArrayList<JTextField>();
-						params.add(new JTextField("Nombre maximum d'itérations sans amélioration : " + info.get(0).toString()));
+						log = new Vector<String>();
+						log.add("Début de la résolution : Méthode : CPLEX");
+						tableJournal.addRow(log);
 						
-						valObj = new JTextField();
+						sol = cplex.calculerSolution(new PLNEPMediane(donnees));
 					}
 					
-					
-					journal.add(methode);
-					for(int i = 0; i < params.size(); i ++){
-						journal.add(params.get(i));
-					}
-					journal.add(valObj);
-				
-					journal.add(new JTextField());
+					log = new Vector<String>();
+					log.add("Fin de la résolution : valeur de la fonction objectif : "+f.calculer(sol));
+					tableJournal.addRow(log);
 				}				
 			});
 			this.menu1.addSeparator();
@@ -295,6 +297,10 @@ import pmediane.VoisinagePMediane;
 			
 			//Pour l'onglet 2 ==> Journal
 			journal = new JPanel();
+			journal.setLayout(new BoxLayout(journal, BoxLayout.Y_AXIS));
+			tableJournal = new DefaultTableModel();
+			tableJournal.addColumn("Information");
+			journal.add(new JScrollPane(new JTable(tableJournal)));
 
 			
 			//Création de notre conteneur d'onglets
@@ -309,9 +315,8 @@ import pmediane.VoisinagePMediane;
 			this.setVisible(true);
 		}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		Interface i = new Interface();
-
 	}
-
 }
