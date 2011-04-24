@@ -30,8 +30,11 @@ public class ConfigurationRS extends Configuration{
      private JTextField tauxDecroissanceDef = new JTextField("0.90");
      private JLabel tauxDecroissance = new JLabel("Taux de décroissance");
      private JCheckBox tempCase = new JCheckBox("Auto");
+     private JCheckBox itCase = new JCheckBox("Auto");
      private JPanel pan = new JPanel();
-     
+
+     private Double auto = 1.0;
+     private Double autoIt = 1.0;
 	public ConfigurationRS(){
 	}
 	
@@ -40,7 +43,7 @@ public class ConfigurationRS extends Configuration{
 		this.setSize(400, 200);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-	
+		
 		
 	    
 	// pan.setBackground(Color.white);
@@ -68,18 +71,40 @@ public class ConfigurationRS extends Configuration{
 	    pan.getComponent(1).setEnabled(false);
 	    ActionListener grisee = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	if(tempCase.isSelected())
+	        	if(tempCase.isSelected()){
+	        		auto = 0.0;
 	        		pan.getComponent(1).setEnabled(false);
-	            else
+	        	}
+	            else{
 	            	pan.getComponent(1).setEnabled(true);
+	            	auto = 1.0;
+	            }
 	        }
-	    };
+	    }; 
+	    
 	    tempCase.addActionListener(grisee);
+	    
 	    pan.add(tempCase);
 	    pan.add(tempArret);
 	    pan.add(tempArretDef);
 	    pan.add(nbIt);
 	    pan.add(nbItDef);
+	    pan.getComponent(6).setEnabled(false);
+	    ActionListener griseeIt = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	if(itCase.isSelected()){
+	        		autoIt = 0.0;
+	        		pan.getComponent(6).setEnabled(false);
+	        	}
+	            else{
+	            	pan.getComponent(6).setEnabled(true);
+	            	autoIt = 1.0;
+	            }
+	        }
+	    };
+	    itCase.setSelected(true);
+	    itCase.addActionListener(griseeIt);
+	    pan.add(itCase);
 	    pan.add(tauxDecroissance);
 	    pan.add(tauxDecroissanceDef);
 	    pan.add(ok);
@@ -99,6 +124,8 @@ public class ConfigurationRS extends Configuration{
 		list.add(Double.parseDouble(tempArretDef.getText()));
 		list.add(Double.parseDouble(nbItDef.getText()));
 		list.add(Double.parseDouble(tauxDecroissanceDef.getText()));
+		list.add(auto);
+		list.add(autoIt);
 		return list;
 	}
 }

@@ -217,7 +217,8 @@ import pmediane.VoisinagePMediane;
 	        info.add(0.001);
 	        info.add(-1.0);
 	        info.add(0.90);
-	        
+	        info.add(1.0);
+	        info.add(1.0);
 
 			config = new ConfigurationRS();
 			item7.setEnabled(true);
@@ -233,7 +234,8 @@ import pmediane.VoisinagePMediane;
 			        info.add(0.001);
 			        info.add(-1.0);
 			        info.add(0.90);
-			        
+			        info.add(1.0);
+			        info.add(1.0);
 
 					config = new ConfigurationRS();
 					item7.setEnabled(true);
