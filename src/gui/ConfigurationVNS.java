@@ -25,40 +25,38 @@ public class ConfigurationVNS extends Configuration{
     
      private JPanel pan = new JPanel();
      
-	public ConfigurationVNS(){
+	public ConfigurationVNS()
+	{
+		info = new ArrayList<Double>();
+        info.add(5000.0);
 	}
 	
-	public ArrayList<Double> configuration(){
+	public ArrayList<Double> configuration()
+	{
 		this.setTitle("Configuration de VNS");
 		this.setSize(400, 200);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-	
+	    
+		pan = new JPanel();
 		
-	    
-	// pan.setBackground(Color.white);
-	 //   pan.setLayout(new BorderLayout());
-	           
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-	   
-	    
 	    Font police = new Font("Arial", Font.BOLD, 14);
 	    iterInitDef.setFont(police);
 	    iterInitDef.setPreferredSize(new Dimension(150, 30));
 	
 	    ok.setFont(police);
 	    ok.setPreferredSize(new Dimension(40, 20));
-	    //tempCase.setSelected(true);
+
 	    pan.add(iterInit);
-	    
 	    pan.add(iterInitDef);
 	    
-	
 	    pan.add(ok);
-	  // pan.add(top, BorderLayout.NORTH);
 	   
 	    ActionListener valider = new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
+	    		info = new ArrayList<Double> ();
+	    		info.add(Double.parseDouble(iterInitDef.getText()));
+	    		
 				dispose();
 	        }
 	    };
@@ -66,8 +64,7 @@ public class ConfigurationVNS extends Configuration{
 	    this.setContentPane(pan);
 	
 		this.setVisible(true);
-		ArrayList<Double> list = new ArrayList<Double> ();
-		list.add(Double.parseDouble(iterInitDef.getText()));
-		return list;
+		
+		return info;
 	}
 }

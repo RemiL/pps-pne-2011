@@ -59,7 +59,6 @@ import pmediane.VoisinagePMediane;
 		private JMenuItem item9 = new JMenuItem("A propos");
 		private Configuration config;
 		private ButtonGroup bg = new ButtonGroup();
-		private ArrayList<Double> info;
 		
 		private JTable tableauAdjacences;
 		private JTable tableauCentres;
@@ -132,6 +131,14 @@ import pmediane.VoisinagePMediane;
 						tm.addColumn(j+1, vals);
 					}
 					
+					labelValFoncObj.setText("Valeur de la fonction objectif : ?");
+					
+					tm = (DefaultTableModel) tableauCentres.getModel();
+					tm.setColumnCount(0);
+					
+					tm = (DefaultTableModel) tableauAffectations.getModel();
+					tm.setColumnCount(0);
+					
 					item2.setEnabled(true);
 				}				
 			});
@@ -146,13 +153,16 @@ import pmediane.VoisinagePMediane;
 					
 					if (item4.isSelected())
 					{
-						RSPMediane rs = new RSPMediane(info.get(0), info.get(1), info.get(2).intValue(), info.get(3), voisinage, solution);
+						RSPMediane rs = new RSPMediane((config.getInfo().get(4) == 0.0) ? config.getInfo().get(0) : RSPMediane.TEMP_INIT_AUTO,
+														config.getInfo().get(1),
+													   (config.getInfo().get(5) == 0.0) ? config.getInfo().get(2).intValue() : RSPMediane.NB_PALIERS_AUTO,
+													   config.getInfo().get(3), voisinage, solution);
 						
 						log("Début du calcul : Méthode : Recuit Simulé");
-						log("Température initiale : " + info.get(0));					
-						log("Température d'Arrêt : " + info.get(1));
-						log("Nombre d'itération / paliers : " + info.get(2));
-						log("Taux de décroissance : " + info.get(3));
+						log("Température initiale : " + ((config.getInfo().get(4) == 0.0) ? config.getInfo().get(0) : "Auto"));					
+						log("Température d'Arrêt : " + config.getInfo().get(1));
+						log("Nombre d'itération / paliers : " + ((config.getInfo().get(5) == 0.0) ? config.getInfo().get(2) : "Auto"));
+						log("Taux de décroissance : " + config.getInfo().get(3));
 						
 						t1 = System.nanoTime();
 						sol = rs.calculerSolution(donnees);
@@ -160,10 +170,10 @@ import pmediane.VoisinagePMediane;
 					}
 					else if (item5.isSelected())
 					{
-						VNSPMediane vns = new VNSPMediane(info.get(0).intValue(), voisinage, solution);
+						VNSPMediane vns = new VNSPMediane(config.getInfo().get(0).intValue(), voisinage, solution);
 						
 						log("Début du calcul : Méthode : VNS");
-						log("Nombre maximal d'itérations sans amélioration : " + info.get(0));
+						log("Nombre maximal d'itérations sans amélioration : " + config.getInfo().get(0));
 						
 						t1 = System.nanoTime();
 						sol = vns.calculerSolution(donnees);
@@ -230,16 +240,6 @@ import pmediane.VoisinagePMediane;
 	        //CPLEX
 	        bg.add(item6);
 	        
-	        
-	        //Initialisation de la configuration au Recuit simulé 
-	        info = new ArrayList<Double>();
-	        info.add(1000.);
-	        info.add(0.001);
-	        info.add(-1.0);
-	        info.add(0.90);
-	        info.add(1.0);
-	        info.add(1.0);
-
 			config = new ConfigurationRS();
 			item7.setEnabled(true);
 	       
@@ -249,14 +249,6 @@ import pmediane.VoisinagePMediane;
 			this.menu2.add(item4);
 			item4.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
-					info = new ArrayList<Double>();
-			        info.add(1000.);
-			        info.add(0.001);
-			        info.add(-1.0);
-			        info.add(0.90);
-			        info.add(1.0);
-			        info.add(1.0);
-
 					config = new ConfigurationRS();
 					item7.setEnabled(true);
 				}				
@@ -265,9 +257,6 @@ import pmediane.VoisinagePMediane;
 			this.menu2.add(item5);
 			item5.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
-					info = new ArrayList<Double>();
-			        info.add(250.0);
-					
 					config = new ConfigurationVNS();
 					item7.setEnabled(true);
 				}				
@@ -285,7 +274,7 @@ import pmediane.VoisinagePMediane;
 			this.menu2.add(item7);
 			item7.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
-					info = config.configuration();
+					config.configuration();
 				}				
 			});
 			
