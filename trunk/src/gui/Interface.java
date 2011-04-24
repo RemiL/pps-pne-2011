@@ -131,6 +131,7 @@ import pmediane.VoisinagePMediane;
 			item2.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent arg0) {
+					long t1, t2;
 					
 					if (item4.isSelected())
 					{
@@ -142,7 +143,9 @@ import pmediane.VoisinagePMediane;
 						log("Nombre d'itération / paliers : " + info.get(2));
 						log("Taux de décroissance : " + info.get(3));
 						
+						t1 = System.nanoTime();
 						sol = rs.calculerSolution(donnees);
+						t2 = System.nanoTime();
 					}
 					else if (item5.isSelected())
 					{
@@ -151,7 +154,9 @@ import pmediane.VoisinagePMediane;
 						log("Début du calcul : Méthode : VNS");
 						log("Nombre maximal d'itérations sans amélioration : " + info.get(0));
 						
+						t1 = System.nanoTime();
 						sol = vns.calculerSolution(donnees);
+						t2 = System.nanoTime();
 					}
 					else
 					{
@@ -164,10 +169,14 @@ import pmediane.VoisinagePMediane;
 						}
 						log("Début de la résolution : Méthode : CPLEX");
 						
+						t1 = System.nanoTime();
 						sol = cplex.calculerSolution(new PLNEPMediane(donnees));
+						t2 = System.nanoTime();
 					}
 					
-					log("Fin de la résolution : valeur de la fonction objectif : "+f.calculer(sol));
+					log("Fin de la résolution : valeur de la fonction objectif : "+f.calculer(sol)+
+						" | temps = "+((t2 - t1)/1000000000.)+" s");
+					log("");
 				}				
 			});
 			this.menu1.addSeparator();
