@@ -77,6 +77,9 @@ import pmediane.VoisinagePMediane;
 		
 		//Pour les onglets
 		private JTabbedPane onglet;
+
+		private JLabel labelAdjacences;
+		private JLabel labelValFoncObj;
 		
 		public Interface()
 		{
@@ -102,8 +105,15 @@ import pmediane.VoisinagePMediane;
 						e.printStackTrace();
 					}
 					
-					
 					//pour l'onglet 1
+					labelAdjacences.setText("Matrice d'adjacence (nb entités = "+
+							donnees.getNbEntites()+", nb centres à ouvrir = "+donnees.getNbCentres()+") :");
+					
+					log("Chargement d'une instance : "+instance.getSelectedFile().getAbsolutePath());
+					log(" - Nombre d'entités : "+donnees.getNbEntites());
+					log(" - Nombre de centres à ouvrir : "+donnees.getNbCentres());
+					log("");
+					
 					DefaultTableModel tm = (DefaultTableModel) tableauAdjacences.getModel();
 					tm.setColumnCount(0);
 					
@@ -121,6 +131,7 @@ import pmediane.VoisinagePMediane;
 						
 						tm.addColumn(j+1, vals);
 					}
+					
 					item2.setEnabled(true);
 				}				
 			});
@@ -177,6 +188,8 @@ import pmediane.VoisinagePMediane;
 					log("Fin de la résolution : valeur de la fonction objectif : "+f.calculer(sol)+
 						" | temps = "+((t2 - t1)/1000000000.)+" s");
 					log("");
+					
+					labelValFoncObj.setText("Valeur de la fonction objectif : "+f.calculer(sol));
 				}				
 			});
 			this.menu1.addSeparator();
@@ -296,10 +309,12 @@ import pmediane.VoisinagePMediane;
 			
 			JPanel textuelle = new JPanel();
 			textuelle.setLayout(new BoxLayout(textuelle, BoxLayout.Y_AXIS));
-			textuelle.add(new JLabel("Matrice d'adjacence :"));
+			labelAdjacences = new JLabel("Matrice d'adjacence :");
+			textuelle.add(labelAdjacences);
 			textuelle.add(new JScrollPane(tableauAdjacences));
 			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
-			textuelle.add(new JLabel("Valeur de la fonction objectif : ?"));
+			labelValFoncObj = new JLabel("Valeur de la fonction objectif : ?");
+			textuelle.add(labelValFoncObj);
 			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
 			textuelle.add(new JLabel("Centres ouverts :"));
 			textuelle.add(new JScrollPane(tableauCentres));
