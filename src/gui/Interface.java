@@ -9,11 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -78,6 +80,8 @@ import pmediane.VoisinagePMediane;
 
 		private JLabel labelAdjacences;
 		private JLabel labelValFoncObj;
+
+		private JButton boutonExport;
 		
 		public Interface()
 		{
@@ -139,6 +143,7 @@ import pmediane.VoisinagePMediane;
 					tm.setColumnCount(0);
 					
 					item2.setEnabled(true);
+					boutonExport.setEnabled(false);
 				}				
 			});
 			item2.setEnabled(false);
@@ -219,6 +224,8 @@ import pmediane.VoisinagePMediane;
 							
 						tm.addColumn(i+1, vals);
 					}
+					
+					boutonExport.setEnabled(true);
 				}				
 			});
 			this.menu1.addSeparator();
@@ -333,6 +340,21 @@ import pmediane.VoisinagePMediane;
 			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
 			textuelle.add(new JLabel("Affectations :"));
 			textuelle.add(new JScrollPane(tableauAffectations));
+			textuelle.add(Box.createRigidArea(new Dimension(1, 10)));
+			boutonExport = new JButton("Exporter la solution");
+			boutonExport.setEnabled(false);
+			boutonExport.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JFileChooser export = new JFileChooser();
+					export.showOpenDialog(null);
+					try {
+						sol.exporter(export.getSelectedFile().getAbsolutePath());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			textuelle.add(boutonExport);
 			
 			//Pour l'onglet 2 ==> Journal
 			journal = new JPanel();
