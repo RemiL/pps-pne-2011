@@ -29,6 +29,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+
 import pmediane.CPLEXPMediane;
 import pmediane.DataPMediane;
 import pmediane.FonctionObjectifPMediane;
@@ -82,6 +89,11 @@ import pmediane.VoisinagePMediane;
 		private JLabel labelValFoncObj;
 
 		private JButton boutonExport;
+
+		private UndirectedSparseGraph<Integer, Number> graph;
+		private VisualizationViewer<Integer, Number> vv;
+
+		private JPanel graphique;
 		
 		public Interface()
 		{
@@ -99,6 +111,8 @@ import pmediane.VoisinagePMediane;
 			item1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					//Charger une instance
+					graphique.removeAll();
+					
 					JFileChooser instance = new JFileChooser();
 					instance.showOpenDialog(null);
 					try {
@@ -152,6 +166,8 @@ import pmediane.VoisinagePMediane;
 			//Lancer la résolution
 			item2.addActionListener(new ActionListener() {
 				
+				private FRLayout<Integer, Number> layout;
+
 				public void actionPerformed(ActionEvent arg0) {
 					long t1, t2;
 					
@@ -226,6 +242,25 @@ import pmediane.VoisinagePMediane;
 					}
 					
 					boutonExport.setEnabled(true);
+					
+					// Affichage graphique
+					graphique.removeAll();
+					graphique.setLayout(new BoxLayout(graphique, BoxLayout.Y_AXIS));
+					graph = new UndirectedSparseGraph<Integer, Number>();
+					for (int i=1; i<=donnees.getNbEntites(); i++)
+						graph.addVertex(i);
+					for (int i=0; i<donnees.getNbEntites(); i++)
+					{
+						if (sol.getCentre(i) != i)
+							graph.addEdge(new Double(Math.random()), sol.getCentre(i)+1, i+1);
+					}
+					layout = new FRLayout<Integer, Number>(graph);
+					layout.setAttractionMultiplier(0.1);
+					layout.setRepulsionMultiplier(0.1);
+			        vv = new VisualizationViewer<Integer, Number>(layout);
+			        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Integer>());
+			        vv.setGraphMouse(new DefaultModalGraphMouse<Integer, Number>());
+			        graphique.add(new GraphZoomScrollPane(vv));
 				}				
 			});
 			this.menu1.addSeparator();
@@ -316,8 +351,8 @@ import pmediane.VoisinagePMediane;
 			//Création de nos onglets
 			
 			//Pour l'onglet 0 ==> Données graphiques
-			JPanel graphique = new JPanel();
-			
+			graphique = new JPanel();
+    		
 			//pour l'onglet 1 ==> Données textuelles
 			tableauAdjacences = new JTable(new DefaultTableModel());
 			tableauAdjacences.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
