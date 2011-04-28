@@ -2,6 +2,8 @@ package pmediane;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -159,5 +161,29 @@ public class DataPMediane
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Exporte les données dans un fichier :
+	 * - la première comporte le nombre d'entités et de centres à ouvrir.
+	 * - les lignes suivantes comportent la liste des liens sous la forme
+	 *   .
+	 * 
+	 * @param nomFichier le nom du fichier à créer.
+	 * @throws IOException si l'écriture échoue.
+	 */
+	public void exporter(String nomFichier) throws IOException
+	{
+		FileWriter f = new FileWriter(nomFichier);
+		
+		f.write(Integer.toString(nbEntites)+" "+Integer.toString(nbCentres)+"\n");
+		
+		for (int i=0; i<nbEntites; i++)
+		{
+			for (int j=0; j<i; j++)
+				f.write(Integer.toString(i+1)+" "+Integer.toString(j+1)+" "+Integer.toString(distances[i][j])+"\n");
+		}
+		
+		f.close();
 	}
 }
